@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#050816">
+  <title>WonderBook</title>
+  <link rel="icon" href="assets/favicon-32.png?v=2" type="image/png" sizes="32x32">
+  <link rel="icon" href="assets/favicon.svg?v=2" type="image/svg+xml" sizes="any">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=2">
+
+  <!-- Fonts: Google Fonts for now. Self-host Cormorant Garamond + Inter (woff2) before production. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/book.css">
+  <link rel="stylesheet" href="css/result.css">
+</head>
+
+<!--
+  CONVENTIONS (shared with js/*.js)
+
+  Copy      Every user-facing string lives in data/ui.json. Nothing is hard-coded here.
+            data-i18n="path.in.ui.json"                        -> sets textContent
+            data-i18n-attr="attr:path;attr2:path2"             -> sets attributes (placeholder, aria-label…)
+  State     body[data-state] = home | ready | ritual | result  (set by main.js, the only writer)
+  Stage     #stage classes   = is-ready (intention chosen) · is-active (pages flipping) · is-open (cover open)
+  Overlays  #result, #modal, #share are toggled with the [hidden] attribute, never with classes.
+  Ownership home.js -> #intentions, #ask · book.js -> #book-scene, #motes · result.js -> #result, #share
+            main.js -> #lang-toggle, #stars, body state
+-->
+<body data-state="home">
+
+  <!-- Background: photo (CSS) + twinkling stars (canvas) + occasional shooting star -->
+  <div class="cosmos" aria-hidden="true">
+    <canvas id="stars"></canvas>
+    <div class="shoot"></div>
+  </div>
+
+  <div class="app" id="app">
+
+    <!-- Link back to the author's site. Intentionally English in both languages. -->
+    <a class="back" href="https://ntkientn.github.io/webnet/" lang="en"><span class="back-arrow" aria-hidden="true">←</span> Back to Webnet</a>
+
+    <header class="top">
+      <span class="brand" data-i18n="brand.name"></span>
+      <button class="lang" id="lang-toggle" type="button" aria-label="Language / Ngôn ngữ">
+        <span data-lang="vi">VI</span> / <span data-lang="en">EN</span>
+      </button>
+    </header>
+
+    <main class="home" id="home">
+      <h1 class="prompt">
+        <span data-i18n="home.promptLead"></span><em data-i18n="home.promptAccent"></em>
+      </h1>
+
+      <h2 class="kicker" id="kicker" data-i18n="home.sectionTitle"></h2>
+      <!-- 11 intention buttons are rendered by home.js from data/ui.json -->
+      <div class="intentions" id="intentions" role="group" aria-labelledby="kicker"></div>
+
+      <!-- Optional question: collapsed by default, never looks like a required form field -->
+      <div class="ask" id="ask">
+        <button class="ask-invite" id="ask-invite" type="button"
+                aria-expanded="false" aria-controls="ask-field"
+                data-i18n="question.invite"></button>
+        <div class="ask-field" id="ask-field" hidden>
+          <input class="question" id="question" type="text" maxlength="200"
+                 autocomplete="off" spellcheck="false" enterkeyhint="done"
+                 data-i18n-attr="placeholder:question.placeholder;aria-label:question.invite">
+          <!-- Shown by home.js only when the browser supports speech recognition -->
+          <button class="voice" id="voice" type="button" hidden
+                  data-i18n-attr="aria-label:question.voiceStart">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+                 stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>
+            </svg>
+          </button>
+        </div>
+        <p class="ask-note" id="ask-note" role="status" hidden></p>
+      </div>
+    </main>
+
+    <!-- The book: build and animation live in book.js / book.css -->
+    <section class="stage" id="stage">
+      <div class="glow" aria-hidden="true"></div>
+      <div class="beam" aria-hidden="true"></div>
+      <canvas class="motes" id="motes" aria-hidden="true"></canvas>
+      <button class="bookbtn" id="book" type="button" data-i18n-attr="aria-label:book.ariaLabel">
+        <span class="book" id="book-scene" aria-hidden="true"></span>
+      </button>
+      <div class="hint-area">
+        <p class="hint" id="hint" data-i18n="book.hint"></p>
+        <!-- Shown for a few seconds when the book is pressed before a topic is chosen (text set by book.js) -->
+        <p class="hint hint--need" id="hint-need" role="status"></p>
+      </div>
+    </section>
+
+    <!-- Intentionally English in both languages -->
+    <footer class="foot" lang="en">© 2026 Wonder Book · Kien NT · All rights reserved</footer>
+
+  </div>
+
+  <!-- Result Screen (progressive reveal, driven by result.js) -->
+  <section class="scrim result" id="result" role="dialog" aria-modal="true"
+           aria-labelledby="res-title" tabindex="-1" hidden>
+    <div class="res">
+      <h2 class="msg" id="res-title">
+        <span class="sr-only" data-i18n="result.ariaMessage"></span><span id="res-message"></span>
+      </h2>
+      <div class="rule" aria-hidden="true"></div>
+      <p class="meaning">
+        <span class="sr-only" data-i18n="result.ariaMeaning"></span><span id="res-meaning"></span>
+      </p>
+      <p class="guidance">
+        <span class="sr-only" data-i18n="result.ariaGuidance"></span><span id="res-guidance"></span>
+      </p>
+      <div class="acts">
+        <button class="act" id="res-share" type="button" data-i18n="result.shareAction"></button>
+        <button class="act act-quiet" id="res-reset" type="button" data-i18n="result.resetAction"></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- "A Little Bit of Everything!" humor modal -->
+  <section class="scrim modal" id="modal" role="dialog" aria-modal="true"
+           aria-describedby="joke-text" tabindex="-1" hidden>
+    <div class="joke">
+      <p class="joke-text" id="joke-text"></p>
+      <div class="acts">
+        <button class="act" id="joke-next" type="button" data-i18n="modal.another"></button>
+        <button class="act act-quiet" id="joke-close" type="button" data-i18n="modal.rechoose"></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Share Card preview (image is generated on a canvas by result.js) -->
+  <section class="scrim share" id="share" role="dialog" aria-modal="true" tabindex="-1" hidden>
+    <div class="share-box">
+      <img class="share-card" id="share-card" alt="" width="1080" height="1350">
+      <div class="acts">
+        <button class="act" id="share-send" type="button" hidden data-i18n="share.send"></button>
+        <button class="act" id="share-save" type="button" data-i18n="share.save"></button>
+        <button class="act act-quiet" id="share-close" type="button" data-i18n="share.close"></button>
+      </div>
+    </div>
+  </section>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+{
+  "_readme": "All user-facing copy for WonderBook. Every string is {vi, en}. Do not hard-code copy in JS/HTML. Intention order here is the display order on Home.",
+
+  "languages": {
+    "default": "vi",
+    "supported": ["vi", "en"],
+    "storageKey": "wonderbook.lang"
+  },
+
+  "brand": {
+    "name": "WonderBook",
+    "tagline": { "vi": "Thông điệp từ vũ trụ", "en": "Messages from the Universe" }
+  },
+
+  "home": {
+    "promptLead": {
+      "vi": "Nếu có thể nhận được một thông điệp từ vũ trụ, bạn đang nghĩ đến ",
+      "en": "If you could receive a message from the universe, what’s "
+    },
+    "promptAccent": { "vi": "điều gì?", "en": "on your mind?" },
+    "sectionTitle": { "vi": "CHỌN ĐIỀU ĐANG HIỆN LÊN TRONG TÂM TRÍ BẠN NGAY LÚC NÀY", "en": "CHOOSE WHAT’S COMING TO MIND RIGHT NOW" }
+  },
+
+  "intentions": [
+    { "id": "life",          "type": "topic", "label": { "vi": "Cuộc sống",             "en": "Life & Direction" } },
+    { "id": "love",          "type": "topic", "label": { "vi": "Tình yêu",              "en": "Love & Romance" } },
+    { "id": "family",        "type": "topic", "label": { "vi": "Gia đình",              "en": "Family" } },
+    { "id": "relationships", "type": "topic", "label": { "vi": "Các mối quan hệ",       "en": "Relationships" } },
+    { "id": "work",          "type": "topic", "label": { "vi": "Công việc & Sự nghiệp", "en": "Work & Career" } },
+    { "id": "money",         "type": "topic", "label": { "vi": "Tiền bạc & Tài chính",  "en": "Money & Finance" } },
+    { "id": "health",        "type": "topic", "label": { "vi": "Sức khỏe & Bình an",    "en": "Health & Wellbeing" } },
+    { "id": "growth",        "type": "topic", "label": { "vi": "Phát triển bản thân",   "en": "Personal Growth" } },
+    { "id": "dreams",        "type": "topic", "label": { "vi": "Ước mơ & Cơ hội",       "en": "Dreams & Opportunities" } },
+    { "id": "fun",           "type": "fun",   "label": { "vi": "Rất nhiều thứ!",        "en": "A Little Bit of Everything!" } },
+    {
+      "id": "open",
+      "type": "open",
+      "label":   { "vi": "Điều gì sẽ đến?", "en": "What Awaits?" },
+      "support": {
+        "vi": "Không giới hạn chủ đề — để vũ trụ lựa chọn.",
+        "en": "No topic limits — let the universe choose."
+      }
+    }
+  ],
+
+  "question": {
+    "invite":      { "vi": "Bạn muốn gửi kèm một câu hỏi?", "en": "Would you like to add a question?" },
+    "placeholder": { "vi": "Viết điều bạn đang nghĩ đến...", "en": "Write what’s on your mind..." },
+    "voiceStart":  { "vi": "Nói thay vì gõ", "en": "Speak instead of typing" },
+    "voiceStop":   { "vi": "Dừng ghi âm", "en": "Stop recording" },
+    "voiceDenied": {
+      "vi": "Không thể dùng micro. Bạn có thể gõ câu hỏi thay thế.",
+      "en": "Microphone isn’t available. You can type your question instead."
+    }
+  },
+
+  "book": {
+    "hint":      { "vi": "Chạm và giữ cuốn sách", "en": "Press and hold the book" },
+    "needTopic": { "vi": "Hãy chọn một chủ đề trước nhé", "en": "Please choose a topic first" },
+    "ariaLabel": {
+      "vi": "Cuốn sách. Chạm và giữ để lật trang, hoặc chạm một lần để lật liên tục, chạm lần nữa để dừng.",
+      "en": "The book. Press and hold to flip pages, or tap once to keep flipping and tap again to stop."
+    }
+  },
+
+  "result": {
+    "shareAction": { "vi": "Tạo thiệp chia sẻ", "en": "Create Shareable Card" },
+    "resetAction": { "vi": "Bắt đầu lại", "en": "New Ritual" },
+    "ariaMessage":  { "vi": "Thông điệp", "en": "The message" },
+    "ariaMeaning":  { "vi": "Ý nghĩa",    "en": "The meaning" },
+    "ariaGuidance": { "vi": "Gợi ý",      "en": "The guidance" }
+  },
+
+  "share": {
+    "cardTagline": { "vi": "Thông điệp từ vũ trụ", "en": "Messages from the Universe" },
+    "save":  { "vi": "Lưu ảnh",  "en": "Save image" },
+    "send":  { "vi": "Chia sẻ",  "en": "Share" },
+    "close": { "vi": "Đóng",     "en": "Close" },
+    "fileName": "wonderbook-message",
+    "shareTitle": { "vi": "Một thông điệp từ WonderBook", "en": "A message from WonderBook" }
+  },
+
+  "modal": {
+    "another":  { "vi": "Cho tôi một câu khác", "en": "Give me another one" },
+    "rechoose": { "vi": "Để tôi chọn lại",      "en": "Let me choose again" }
+  },
+
+  "jokes": [
+    { "id": "j01", "text": {
+      "vi": "Bớt overthinking một chút đi bạn! Vũ trụ cũng cần biết bạn đang muốn hỏi chuyện gì chứ! 😂",
+      "en": "Take it easy on the overthinking! The universe needs to know what you’re asking, too! 😂" } },
+    { "id": "j02", "text": {
+      "vi": "Bạn đang hỏi vũ trụ hay đang họp với 100 suy nghĩ trong đầu vậy? 😵‍💫",
+      "en": "Are you asking the universe, or holding a meeting with 100 thoughts in your head? 😵‍💫" } },
+    { "id": "j03", "text": {
+      "vi": "Từ từ thôi! Vũ trụ chưa có chức năng mở 100 tab cùng lúc đâu! 😂",
+      "en": "Slow down! The universe hasn’t figured out how to open 100 tabs at once! 😂" } },
+    { "id": "j04", "text": {
+      "vi": "Một câu hỏi thôi bạn ơi, đừng gửi nguyên cuốn tiểu thuyết! 📚",
+      "en": "Just one question, please. No need to send an entire novel! 📚" } },
+    { "id": "j05", "text": {
+      "vi": "Tín hiệu hơi nhiễu rồi! Hình như bạn đang phát sóng quá nhiều câu hỏi cùng lúc! 📡",
+      "en": "The signal is getting fuzzy! Looks like you’re broadcasting too many questions at once! 📡" } },
+    { "id": "j06", "text": {
+      "vi": "Vũ trụ đang loading... vì không biết nên trả lời câu nào trước! ⏳",
+      "en": "The universe is loading... It can’t decide which question to answer first! ⏳" } },
+    { "id": "j07", "text": {
+      "vi": "Các vì sao vừa nhìn nhau... và cùng hỏi: Rốt cuộc là chuyện gì vậy? ⭐",
+      "en": "The stars just looked at each other and asked, “Wait, what’s going on?” ⭐" } },
+    { "id": "j08", "text": {
+      "vi": "Vũ trụ có thể rộng vô tận, nhưng hôm nay chúng ta chỉ xử lý một chuyện thôi nhé! 😆",
+      "en": "The universe may be infinite, but let’s tackle one thing at a time today! 😆" } },
+    { "id": "j09", "text": {
+      "vi": "Chọn một điều trước nhé! Những chuyện còn lại xếp hàng nào! 😄",
+      "en": "Pick one thing first! The rest can wait in line! 😄" } },
+    { "id": "j10", "text": {
+      "vi": "Tâm trí bạn hôm nay đông vui quá! Mời từng suy nghĩ phát biểu! 🎤",
+      "en": "It’s a busy day in your mind! Let’s hear one thought at a time! 🎤" } },
+    { "id": "j11", "text": {
+      "vi": "Bí mật của vũ trụ thì nhiều, nhưng bạn không cần giải quyết hết trong một lần đâu! 😉",
+      "en": "The universe has many mysteries, but you don’t have to solve them all at once! 😉" } },
+    { "id": "j12", "text": {
+      "vi": "Hít thở nào! Chọn một điều khiến bạn tò mò nhất lúc này nhé! 🌿",
+      "en": "Take a breath! Choose the one thing you’re most curious about right now! 🌿" } }
+  ]
+}
