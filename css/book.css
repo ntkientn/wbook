@@ -1,0 +1,240 @@
+/* ==========================================================================
+   book.css — the antique book and the light around it.
+
+   Depends on base.css tokens (--gold, --gold-soft, --font-serif).
+
+   DOM (built by js/book.js inside <span class="book" id="book-scene">)
+     .board.board--right          back cover, right half
+     .board.board--left           back cover, left half (appears once open)
+     .pages.pages--left           page block, left  → contains .page-text
+     .pages.pages--right          page block, right → contains .page-text
+     .leaves > .leaf × N          the pages that fly
+        .leaf-side--front / --back   → each contains .page-text
+     .gutter                      shadow in the spine
+     .page-light                  glow rising from the open pages
+     .cover                       front cover, hinged at the spine
+        .cover-front (+ svg.emblem) / .cover-back
+   .page-text (decorative, deliberately blurred so it is texture, never content)
+        .pt-message · .pt-rule · .pt-meaning · .pt-guidance
+
+   Resting pose: until a topic is chosen the book lies flat (js/book.js tilts it
+   to ~68°, lower and a little smaller) and the hint line is hidden; choosing a
+   topic stands it up. The tilt is written inline each frame, like the rest.
+
+   Stage state classes on #stage (is-ready is set by main.js, the rest by book.js)
+     .is-ready   an intention is chosen → book is lit and inviting
+     .is-active  pages are flipping     → light intensifies, hint fades
+     .is-open    cover is open          → beam of light and rising motes
+
+   Inline styles written by book.js every frame (do not animate these in CSS)
+     .book       transform           .cover        transform
+     .leaf       transform, opacity, --sh (shade 0‥1)
+     .pages--left / .board--left / .gutter / .page-light   opacity
+
+   Reduced motion: book.js decides the simplified path and adds .is-reduced
+   to .book; this file only supplies the hooks.
+   ========================================================================== */
+
+/* ---------- 1. Light around the book (lives in #stage) ---------- */
+
+.glow {
+  position: absolute; left: 50%; bottom: 40px;
+  width: 420px; max-width: 120%; height: 240px;
+  transform: translateX(-50%);
+  background: radial-gradient(closest-side, rgba(230, 201, 138, 0.3), rgba(201, 164, 92, 0.08) 55%, transparent);
+  opacity: 0.15; transition: opacity 1.2s; /* barely there while the book rests */
+  pointer-events: none;
+}
+.stage.is-ready .glow { opacity: 0.85; }
+.stage.is-active .glow { opacity: 1; }
+
+.beam {
+  position: absolute; left: 50%; bottom: 70px;
+  width: 70%; max-width: 360px; height: 300px;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse 50% 100% at 50% 100%, rgba(255, 232, 170, 0.5), rgba(230, 201, 138, 0.12) 55%, transparent 75%);
+  filter: blur(6px); mix-blend-mode: screen;
+  opacity: 0; transition: opacity 1s;
+  pointer-events: none;
+}
+.stage.is-open .beam { opacity: 0.6; }
+.stage.is-open.is-active .beam { opacity: 1; }
+
+.motes { /* rising golden dust, drawn by book.js */
+  position: absolute; left: 0; bottom: 0;
+  width: 100%; height: 420px;
+  pointer-events: none;
+}
+
+/* ---------- 2. The button that wraps the book ---------- */
+
+.bookbtn {
+  --book-width: min(70vw, 320px);
+  --leather-hi: #2f2147;
+  --leather-mid: #181130;
+  --leather-lo: #0d0a1e;
+  --leather-edge: #120d26;
+  --paper-edge: #cfc3a4;
+  --paper-lit: #f2e9d3;
+  --paper-shade: #ebe1c8;
+  --page-ink: rgba(70, 44, 14, 0.9);
+
+  position: relative; display: block;
+  width: var(--book-width); aspect-ratio: 1.6;
+  margin: 0 auto;
+  perspective: 1400px;
+  container-type: inline-size; /* page text scales with the book (cqw) */
+  cursor: default;
+  pointer-events: auto; /* .stage ignores taps; only the book itself receives them */
+  opacity: 0.62; filter: saturate(0.7);
+  transition: opacity 1s, filter 1s;
+  user-select: none; -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: none; /* holding must never scroll the page */
+}
+.bookbtn:focus-visible { outline: 1px solid var(--gold); outline-offset: 8px; border-radius: 10px; }
+
+.stage.is-ready .bookbtn { opacity: 1; filter: none; cursor: pointer; }
+
+/* gentle invitation while the book is closed and waiting */
+.stage.is-ready:not(.is-open) .bookbtn { animation: float 5s ease-in-out infinite; }
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-4px); }
+}
+
+/* ---------- 3. 3D scene ---------- */
+
+.book {
+  position: absolute; inset: 6% 0 0;
+  transform-style: preserve-3d;
+  transform: rotateX(33deg) translateX(-25%); /* closed: shifted so the cover sits centred */
+}
+.book > * { position: absolute; }
+
+/* back covers */
+.board {
+  top: 0; bottom: 0; width: 50%;
+  transform: translateZ(-10px);
+  background: linear-gradient(160deg, #2a1d3f, #161029 55%, var(--leather-lo));
+  box-shadow: 0 40px 60px -12px #000, 0 0 0 1px rgba(201, 164, 92, 0.4);
+}
+.board--right { left: 50%; border-radius: 3px 8px 8px 3px; }
+.board--left  { left: 0;   border-radius: 8px 3px 3px 8px; opacity: 0; }
+
+/* page blocks */
+.pages {
+  top: 5%; bottom: 7%; width: 45%;
+  transform: translateZ(0);
+  overflow: hidden;
+}
+.pages--right {
+  left: 50%; border-radius: 0 4px 4px 0;
+  background: linear-gradient(90deg, var(--paper-edge), #f1e8d2 18%, var(--paper-shade));
+  box-shadow: inset 14px 0 18px -8px rgba(60, 40, 10, 0.35);
+}
+.pages--left {
+  left: 5%; border-radius: 4px 0 0 4px; opacity: 0;
+  background: linear-gradient(270deg, var(--paper-edge), #f1e8d2 18%, var(--paper-shade));
+  box-shadow: inset -14px 0 18px -8px rgba(60, 40, 10, 0.35);
+}
+
+/* the flying pages */
+.leaves { left: 0; top: 0; right: 0; bottom: 0; transform-style: preserve-3d; }
+
+.leaf {
+  position: absolute; left: 50%; top: 5%; bottom: 7%; width: 45%;
+  transform-origin: 0 50%; transform-style: preserve-3d;
+  --sh: 0;
+}
+.leaf-side {
+  position: absolute; inset: 0; overflow: hidden;
+  backface-visibility: hidden;
+}
+.leaf-side::after { /* shade that darkens the page as it stands upright */
+  content: ""; position: absolute; inset: 0;
+  background: #2a1805; opacity: var(--sh); pointer-events: none;
+}
+.leaf-side--front {
+  border-radius: 0 4px 4px 0;
+  background: linear-gradient(90deg, var(--paper-edge), var(--paper-lit) 20%, #efe5cc);
+}
+.leaf-side--back {
+  border-radius: 4px 0 0 4px; transform: rotateY(180deg);
+  background: linear-gradient(270deg, var(--paper-edge), var(--paper-lit) 20%, var(--paper-shade));
+}
+
+.gutter {
+  left: 50%; top: 4%; bottom: 6%; width: 10px; margin-left: -5px;
+  background: linear-gradient(90deg, transparent, rgba(40, 25, 5, 0.55), transparent);
+  transform: translateZ(1px); opacity: 0;
+}
+
+.page-light {
+  left: 50%; top: 5%; bottom: 7%; width: 70%; margin-left: -35%;
+  background: radial-gradient(closest-side, rgba(255, 240, 200, 0.55), transparent);
+  mix-blend-mode: screen; transform: translateZ(8px);
+  opacity: 0; pointer-events: none;
+}
+
+/* ---------- 4. Page text: result-shaped, blurred, never readable ---------- */
+
+.page-text {
+  position: absolute; inset: 12% 13%;
+  display: flex; flex-direction: column; justify-content: center;
+  overflow: hidden; text-align: center;
+  font: 500 9px / 1.5 var(--font-serif);
+  font-size: 2.55cqw;
+  color: transparent; /* glyphs are drawn only as a soft blur … */
+  text-shadow: 0 0 1.6px var(--page-ink); /* … so lines read as texture */
+}
+.pt-message  { font-size: 2.1em; line-height: 1.1; font-weight: 600; text-shadow: 0 0 2.6px rgba(90, 52, 14, 0.95); }
+.pt-rule     { display: block; width: 2.2em; height: 1px; margin: 1em auto; background: rgba(120, 80, 25, 0.5); }
+.pt-meaning, .pt-guidance { margin: 0 0 0.8em; }
+.pt-guidance { font-style: italic; }
+
+/* ---------- 5. Front cover (hinged at the spine) ---------- */
+
+.cover {
+  left: 50%; top: 0; bottom: 0; width: 50%;
+  transform-origin: 0 50%; transform-style: preserve-3d;
+  transform: translateZ(14px);
+}
+.cover-front, .cover-back {
+  position: absolute; inset: 0;
+  border-radius: 3px 8px 8px 3px;
+  backface-visibility: hidden;
+}
+.cover-front {
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.55), transparent 10%),
+    linear-gradient(90deg, transparent 3%, rgba(201, 164, 92, 0.55) 3% 3.8%, transparent 3.8% 6.5%, rgba(201, 164, 92, 0.35) 6.5% 7%, transparent 7%),
+    linear-gradient(160deg, var(--leather-hi), var(--leather-mid) 55%, var(--leather-lo));
+  box-shadow:
+    inset 0 0 0 9px var(--leather-edge), inset 0 0 0 10px rgba(201, 164, 92, 0.55),
+    inset 0 0 0 14px var(--leather-edge), inset 0 0 0 15px rgba(201, 164, 92, 0.25),
+    0 0 0 1px rgba(201, 164, 92, 0.5),
+    0 4px 0 #0a0714, 0 7px 0 #cfc3a0, 0 10px 0 #0a0714; /* stacked edges read as thickness */
+}
+.cover-back {
+  transform: rotateY(180deg);
+  background: linear-gradient(160deg, #241a38, #130d26);
+  box-shadow: inset 0 0 0 9px var(--leather-edge), inset 0 0 0 10px rgba(201, 164, 92, 0.4), 0 0 0 1px rgba(201, 164, 92, 0.35);
+}
+
+.emblem {
+  position: absolute; left: 54%; top: 50%; width: 62%;
+  transform: translate(-50%, -50%);
+  color: #d8b66a;
+  filter: drop-shadow(0 0 6px rgba(230, 201, 138, 0.55));
+}
+
+/* ---------- 6. Reduced motion ---------- */
+
+.book.is-reduced .leaf-side--back { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .stage.is-ready:not(.is-open) .bookbtn { animation: none; }
+  .motes { display: none; }
+  .glow, .beam, .bookbtn { transition-duration: 0.01s; }
+}

@@ -1,0 +1,150 @@
+/* ==========================================================================
+   result.css — the Result Screen and the Share Card preview.
+
+   Depends on base.css (tokens, .scrim, .acts, .act).
+
+   DOM (index.html, filled by js/result.js)
+     #result.scrim.result > .res
+        .msg > #res-message          the Message        (appears first, alone)
+        .rule                         a thin gold line
+        .meaning > #res-meaning      the Meaning
+        .guidance > #res-guidance    the Guidance
+        .acts                         Create Shareable Card · New Ritual
+     #share.scrim.share > .share-box
+        img.share-card                the card, rendered on a <canvas> by result.js
+        .acts                         Share · Save image · Close
+
+   PROGRESSIVE REVEAL
+     Each element fades in on its own delay (custom properties below). The
+     animations start by themselves every time the overlay's [hidden] attribute
+     is removed, so result.js never has to restart them. Nothing is removed from
+     the accessibility tree while waiting: screen readers get the whole result.
+     The action buttons ignore taps until they have faded in, so a finger that
+     has just let go of the book cannot hit "New Ritual" by accident.
+
+   SHARE CARD TOKENS
+     The --card-* values on #share are read by result.js when it paints the
+     canvas, so the card's look is defined here, next to the rest of the design.
+   ========================================================================== */
+
+/* ---------- 1. Result Screen ---------- */
+
+.scrim.result {
+  --reveal-message: 0.4s;
+  --reveal-rule: 1.4s;
+  --reveal-meaning: 1.8s;
+  --reveal-guidance: 3.6s;
+  --reveal-actions: 4.8s;
+
+  isolation: isolate;
+  align-items: flex-start;   /* with .res { margin: auto }: centred, yet scrollable on short screens */
+  overflow-y: auto;
+  padding: max(28px, env(safe-area-inset-top)) 28px max(28px, env(safe-area-inset-bottom));
+  background: var(--ink);
+  -webkit-backdrop-filter: none; backdrop-filter: none; /* the photo is the backdrop here */
+}
+
+/* the "open book" photograph, drifting very slowly towards the viewer */
+.scrim.result::before {
+  content: ""; position: fixed; inset: 0; z-index: -2;
+  background: url("../assets/bg-reveal.jpg") center bottom / cover no-repeat;
+  transform-origin: 50% 100%;
+  animation: result-drift 14s ease-out both;
+}
+/* darkening behind the text so it stays readable over the glowing symbols */
+.scrim.result::after {
+  content: ""; position: fixed; inset: 0; z-index: -1;
+  background:
+    radial-gradient(62% 46% at 50% 46%, rgba(4, 7, 18, 0.72), rgba(4, 7, 18, 0.15) 100%),
+    linear-gradient(rgba(4, 7, 18, 0.3), rgba(4, 7, 18, 0.1));
+}
+@keyframes result-drift { from { transform: scale(1.08); } to { transform: scale(1); } }
+
+.res { position: relative; z-index: 1; width: 100%; max-width: 560px; margin: auto; padding: 24px 0; }
+
+.msg {
+  font: 400 clamp(40px, 10vw, 68px) / 1.05 var(--font-serif);
+  color: var(--gold-soft);
+  text-wrap: balance;
+  text-shadow: 0 0 40px rgba(230, 201, 138, 0.35);
+  animation: msg-in 1.8s cubic-bezier(0.22, 0.61, 0.36, 1) var(--reveal-message) both;
+}
+@keyframes msg-in {
+  from { opacity: 0; transform: translateY(10px); filter: blur(8px); }
+  to   { opacity: 1; transform: none; filter: blur(0); }
+}
+
+.rule {
+  width: 46px; height: 1px; margin: 30px auto;
+  background: var(--gold);
+  animation: rule-in 1s ease-out var(--reveal-rule) both;
+}
+@keyframes rule-in { from { opacity: 0; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
+
+.meaning, .guidance {
+  max-width: 420px; margin: 0 auto 22px;
+  text-wrap: pretty;
+  animation: fade-up 1.4s ease-out both;
+}
+.meaning {
+  font: 300 16px / 1.65 var(--font-sans); color: #d8d3c4;
+  animation-delay: var(--reveal-meaning);
+}
+.guidance {
+  font: italic 400 21px / 1.5 var(--font-serif); color: var(--paper);
+  animation-delay: var(--reveal-guidance);
+}
+@keyframes fade-up { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+.res .acts {
+  margin-top: 36px;
+  animation: acts-in 1.2s ease-out var(--reveal-actions) both;
+}
+@keyframes acts-in {
+  from { opacity: 0; pointer-events: none; }
+  to   { opacity: 1; pointer-events: auto; }
+}
+
+/* ---------- 2. Share Card preview ---------- */
+
+#share {
+  --card-ink: #060a1c;        /* card background, bottom */
+  --card-ink-2: #0e1840;      /* card background, top    */
+  --card-gold: #c9a45c;
+  --card-gold-soft: #e6c98a;
+  --card-paper: #efe6d0;
+  --card-mist: #9aa3bd;
+  z-index: var(--z-share);
+}
+
+.share-box { display: flex; flex-direction: column; align-items: center; gap: 26px; max-width: 100%; }
+.share:not([hidden]) .share-box { animation: card-rise 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+@keyframes card-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+.share-card {
+  display: block;
+  width: min(86vw, 420px, calc(62vh * 0.8)); height: auto; aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(201, 164, 92, 0.3);
+  -webkit-touch-callout: default; /* long-press to save works on phones */
+}
+
+/* ---------- 3. Overlays: no focus ring on the dialog container itself ---------- */
+
+.scrim:focus { outline: none; }
+
+/* ---------- 4. Reduced motion: same order, quicker, fade only ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .scrim.result {
+    --reveal-message: 0.1s; --reveal-rule: 0.5s; --reveal-meaning: 0.8s;
+    --reveal-guidance: 1.4s; --reveal-actions: 2s;
+  }
+  .scrim.result::before { animation: none; }
+  .msg { animation-name: fade-only; animation-duration: 0.6s; }
+  .rule { animation-name: fade-only; animation-duration: 0.6s; }
+  .meaning, .guidance { animation-name: fade-only; animation-duration: 0.6s; }
+  .share:not([hidden]) .share-box { animation: none; }
+}
+@keyframes fade-only { from { opacity: 0; } to { opacity: 1; } }
