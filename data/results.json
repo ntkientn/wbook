@@ -1,0 +1,1798 @@
+{
+  "_readme": "WonderBook content library. keywords: tag -> words/phrases (matched as whole words after lowercasing and stripping diacritics, in both languages). results: one entry per message. topics [] + universal true = shown for every topic. tags are internal and are NEVER displayed. algorithm: tuning knobs read by js/content.js.",
+  "version": "0.1",
+  "algorithm": {
+    "topicWeight": 5,
+    "universalWeight": 2,
+    "openBaseWeight": 2,
+    "tagWeight": 3,
+    "maxTagMatches": 2,
+    "outsideTopicChance": 0.15,
+    "topK": 8,
+    "sameThemeMultiplier": 0.15,
+    "sessionKey": "wonderbook.seen"
+  },
+  "topics": [
+    "life",
+    "love",
+    "family",
+    "relationships",
+    "work",
+    "money",
+    "health",
+    "growth",
+    "dreams"
+  ],
+  "keywords": {
+    "career": {
+      "vi": [
+        "công việc",
+        "sự nghiệp",
+        "sếp",
+        "đồng nghiệp",
+        "nghỉ việc",
+        "thăng chức",
+        "lương",
+        "phỏng vấn",
+        "dự án",
+        "công ty"
+      ],
+      "en": [
+        "job",
+        "career",
+        "boss",
+        "colleague",
+        "quit",
+        "promotion",
+        "salary",
+        "interview",
+        "project",
+        "work"
+      ]
+    },
+    "change": {
+      "vi": [
+        "thay đổi",
+        "chuyển việc",
+        "chuyển nhà",
+        "bước ngoặt",
+        "chuyển đổi"
+      ],
+      "en": [
+        "change",
+        "moving",
+        "relocate",
+        "transition",
+        "switch"
+      ]
+    },
+    "decision": {
+      "vi": [
+        "quyết định",
+        "lựa chọn",
+        "phân vân",
+        "do dự",
+        "nên hay không"
+      ],
+      "en": [
+        "decide",
+        "decision",
+        "choice",
+        "choose",
+        "torn",
+        "should i"
+      ]
+    },
+    "fear": {
+      "vi": [
+        "sợ",
+        "lo sợ",
+        "e ngại",
+        "hoảng",
+        "bất an"
+      ],
+      "en": [
+        "afraid",
+        "fear",
+        "scared",
+        "anxious",
+        "worry",
+        "worried"
+      ]
+    },
+    "stress": {
+      "vi": [
+        "căng thẳng",
+        "áp lực",
+        "mệt mỏi",
+        "kiệt sức",
+        "lo lắng",
+        "quá tải"
+      ],
+      "en": [
+        "stress",
+        "stressed",
+        "pressure",
+        "tired",
+        "burnout",
+        "overwhelmed",
+        "exhausted"
+      ]
+    },
+    "love": {
+      "vi": [
+        "yêu",
+        "tình yêu",
+        "người yêu",
+        "hẹn hò",
+        "đám cưới",
+        "kết hôn",
+        "vợ",
+        "chồng",
+        "crush"
+      ],
+      "en": [
+        "love",
+        "dating",
+        "partner",
+        "marriage",
+        "wife",
+        "husband",
+        "boyfriend",
+        "girlfriend",
+        "crush"
+      ]
+    },
+    "breakup": {
+      "vi": [
+        "chia tay",
+        "ly hôn",
+        "ly dị",
+        "bỏ nhau",
+        "quay lại"
+      ],
+      "en": [
+        "breakup",
+        "break up",
+        "divorce",
+        "ex",
+        "split up"
+      ]
+    },
+    "family": {
+      "vi": [
+        "gia đình",
+        "anh chị",
+        "chị gái",
+        "anh trai",
+        "em gái",
+        "em trai"
+      ],
+      "en": [
+        "family",
+        "sibling",
+        "brother",
+        "sister"
+      ]
+    },
+    "parents": {
+      "vi": [
+        "bố",
+        "mẹ",
+        "ba",
+        "cha",
+        "ông bà",
+        "phụ huynh"
+      ],
+      "en": [
+        "parents",
+        "mom",
+        "dad",
+        "mother",
+        "father",
+        "grandparents"
+      ]
+    },
+    "children": {
+      "vi": [
+        "con",
+        "con cái",
+        "nuôi dạy",
+        "con cái"
+      ],
+      "en": [
+        "child",
+        "children",
+        "kids",
+        "baby",
+        "parenting"
+      ]
+    },
+    "friends": {
+      "vi": [
+        "bạn",
+        "bạn bè",
+        "bạn thân",
+        "hội bạn"
+      ],
+      "en": [
+        "friend",
+        "friends",
+        "friendship"
+      ]
+    },
+    "conflict": {
+      "vi": [
+        "cãi nhau",
+        "mâu thuẫn",
+        "hiểu lầm",
+        "giận",
+        "xích mích",
+        "tranh cãi"
+      ],
+      "en": [
+        "argue",
+        "argument",
+        "conflict",
+        "misunderstanding",
+        "fight",
+        "angry"
+      ]
+    },
+    "loneliness": {
+      "vi": [
+        "cô đơn",
+        "một mình",
+        "lạc lõng",
+        "cô độc"
+      ],
+      "en": [
+        "lonely",
+        "alone",
+        "isolated",
+        "loneliness"
+      ]
+    },
+    "money": {
+      "vi": [
+        "tiền",
+        "tài chính",
+        "tiết kiệm",
+        "đầu tư",
+        "chi tiêu",
+        "thu nhập"
+      ],
+      "en": [
+        "money",
+        "finance",
+        "financial",
+        "saving",
+        "savings",
+        "invest",
+        "spending",
+        "income"
+      ]
+    },
+    "debt": {
+      "vi": [
+        "nợ",
+        "vay",
+        "trả góp",
+        "khoản vay"
+      ],
+      "en": [
+        "debt",
+        "loan",
+        "owe",
+        "mortgage"
+      ]
+    },
+    "health": {
+      "vi": [
+        "sức khỏe",
+        "bệnh",
+        "đau",
+        "ốm",
+        "cơ thể"
+      ],
+      "en": [
+        "health",
+        "sick",
+        "illness",
+        "pain",
+        "body"
+      ]
+    },
+    "sleep": {
+      "vi": [
+        "ngủ",
+        "mất ngủ",
+        "giấc ngủ"
+      ],
+      "en": [
+        "sleep",
+        "insomnia"
+      ]
+    },
+    "growth": {
+      "vi": [
+        "phát triển",
+        "học hỏi",
+        "tiến bộ",
+        "bản thân",
+        "hoàn thiện"
+      ],
+      "en": [
+        "growth",
+        "learn",
+        "improve",
+        "myself",
+        "self"
+      ]
+    },
+    "habits": {
+      "vi": [
+        "thói quen",
+        "kỷ luật",
+        "tập thể dục",
+        "duy trì"
+      ],
+      "en": [
+        "habit",
+        "habits",
+        "routine",
+        "discipline",
+        "exercise"
+      ]
+    },
+    "motivation": {
+      "vi": [
+        "động lực",
+        "chán",
+        "trì hoãn",
+        "bỏ cuộc",
+        "lười"
+      ],
+      "en": [
+        "motivation",
+        "procrastinate",
+        "give up",
+        "bored",
+        "unmotivated"
+      ]
+    },
+    "dreams": {
+      "vi": [
+        "ước mơ",
+        "mơ ước",
+        "khát vọng",
+        "đam mê",
+        "mục tiêu"
+      ],
+      "en": [
+        "dream",
+        "dreams",
+        "passion",
+        "goal",
+        "goals",
+        "ambition"
+      ]
+    },
+    "opportunity": {
+      "vi": [
+        "cơ hội",
+        "khởi nghiệp",
+        "kinh doanh",
+        "thử sức"
+      ],
+      "en": [
+        "opportunity",
+        "chance",
+        "startup",
+        "business"
+      ]
+    },
+    "grief": {
+      "vi": [
+        "mất mát",
+        "buồn",
+        "nhớ",
+        "tiếc",
+        "đau lòng",
+        "tang"
+      ],
+      "en": [
+        "loss",
+        "grief",
+        "sad",
+        "miss",
+        "heartbroken"
+      ]
+    },
+    "time": {
+      "vi": [
+        "thời gian",
+        "bao giờ",
+        "khi nào",
+        "chờ đợi",
+        "muộn"
+      ],
+      "en": [
+        "time",
+        "when",
+        "wait",
+        "waiting",
+        "late",
+        "timing"
+      ]
+    },
+    "confidence": {
+      "vi": [
+        "tự tin",
+        "tự ti",
+        "giá trị",
+        "so sánh"
+      ],
+      "en": [
+        "confidence",
+        "insecure",
+        "worth",
+        "compare",
+        "comparison"
+      ]
+    },
+    "boundaries": {
+      "vi": [
+        "ranh giới",
+        "từ chối",
+        "nói không"
+      ],
+      "en": [
+        "boundary",
+        "boundaries",
+        "say no"
+      ]
+    }
+  },
+  "results": [
+    {
+      "id": "life-01",
+      "topics": [
+        "life"
+      ],
+      "universal": false,
+      "theme": "small-steps",
+      "tags": [
+        "change",
+        "motivation"
+      ],
+      "message": {
+        "vi": "Một bước nhỏ vẫn là bước đi",
+        "en": "A small step is still a step"
+      },
+      "meaning": {
+        "vi": "Hướng đi thường rõ dần khi bạn bước, chứ không phải khi bạn đứng chờ nó rõ hết.",
+        "en": "Direction often becomes clear as you move, not while you wait for it to be fully clear."
+      },
+      "guidance": {
+        "vi": "Hãy thử chọn việc nhỏ nhất bạn có thể làm hôm nay, và bắt đầu từ đó.",
+        "en": "Try choosing the smallest thing you can do today, and start there."
+      }
+    },
+    {
+      "id": "life-02",
+      "topics": [
+        "life"
+      ],
+      "universal": false,
+      "theme": "trust",
+      "tags": [
+        "decision",
+        "fear"
+      ],
+      "message": {
+        "vi": "Bạn không cần cả tấm bản đồ",
+        "en": "You don’t need the whole map"
+      },
+      "meaning": {
+        "vi": "Có những điều chỉ hiện ra khi bạn đã đến đủ gần.",
+        "en": "Some things only appear once you’ve come close enough."
+      },
+      "guidance": {
+        "vi": "Có thể bạn cân nhắc quyết định dựa trên bước kế tiếp, thay vì cả hành trình.",
+        "en": "You might consider deciding based on the next step instead of the whole journey."
+      }
+    },
+    {
+      "id": "life-03",
+      "topics": [
+        "life"
+      ],
+      "universal": false,
+      "theme": "clarity",
+      "tags": [
+        "decision",
+        "confidence"
+      ],
+      "message": {
+        "vi": "Lắng nghe điều cứ quay lại",
+        "en": "Listen to what keeps returning"
+      },
+      "meaning": {
+        "vi": "Những suy nghĩ cứ quay lại nhiều lần thường đang muốn nói với bạn điều gì đó.",
+        "en": "Thoughts that keep coming back are often trying to tell you something."
+      },
+      "guidance": {
+        "vi": "Hãy thử viết nó ra giấy, rồi xem nó nói gì khi bạn đọc lại.",
+        "en": "Try writing it down, then see what it says when you read it again."
+      }
+    },
+    {
+      "id": "life-04",
+      "topics": [
+        "life"
+      ],
+      "universal": false,
+      "theme": "rest",
+      "tags": [
+        "stress",
+        "time"
+      ],
+      "message": {
+        "vi": "Dừng lại cũng là một lựa chọn",
+        "en": "Pausing is also a choice"
+      },
+      "meaning": {
+        "vi": "Một quãng nghỉ không khiến bạn tụt lại; đôi khi đó là lúc bạn nhìn rõ mình đang đi đâu.",
+        "en": "A pause doesn’t leave you behind; sometimes it’s when you see where you’re really heading."
+      },
+      "guidance": {
+        "vi": "Hãy thử dành một buổi chiều không kế hoạch, và để ý điều gì khiến bạn thấy nhẹ hơn.",
+        "en": "Try giving yourself an unplanned afternoon, and notice what feels lighter."
+      }
+    },
+    {
+      "id": "life-05",
+      "topics": [
+        "life"
+      ],
+      "universal": false,
+      "theme": "change",
+      "tags": [
+        "change",
+        "time"
+      ],
+      "message": {
+        "vi": "Mùa của bạn đang chuyển",
+        "en": "Your season is shifting"
+      },
+      "meaning": {
+        "vi": "Mỗi chương đều có phần kết, kể cả những chương khiến bạn mệt mỏi.",
+        "en": "Every chapter has an ending, even the ones that wear you out."
+      },
+      "guidance": {
+        "vi": "Có thể bạn cân nhắc điều gì đã đến lúc buông, và điều gì đang chờ được đón vào.",
+        "en": "You might consider what is ready to be released, and what is waiting to be welcomed in."
+      }
+    },
+    {
+      "id": "love-01",
+      "topics": [
+        "love"
+      ],
+      "universal": false,
+      "theme": "honesty",
+      "tags": [
+        "love",
+        "conflict"
+      ],
+      "message": {
+        "vi": "Hãy chân thành trước",
+        "en": "Lead with honesty"
+      },
+      "meaning": {
+        "vi": "Sự gần gũi thường bắt đầu từ việc dám nói điều thật, một cách nhẹ nhàng.",
+        "en": "Closeness often begins with the courage to say something true, gently."
+      },
+      "guidance": {
+        "vi": "Hãy thử chia sẻ với người ấy một cảm xúc thật, bằng giọng nhẹ nhất của bạn.",
+        "en": "Try sharing one honest feeling with them, in the softest voice you have."
+      }
+    },
+    {
+      "id": "love-02",
+      "topics": [
+        "love"
+      ],
+      "universal": false,
+      "theme": "self-compassion",
+      "tags": [
+        "love",
+        "breakup",
+        "confidence"
+      ],
+      "message": {
+        "vi": "Yêu mình trước một chút",
+        "en": "Give yourself some love first"
+      },
+      "meaning": {
+        "vi": "Tình yêu bạn dành cho người khác thường lớn lên từ cách bạn đối xử với chính mình.",
+        "en": "The love you offer others tends to grow from how you treat yourself."
+      },
+      "guidance": {
+        "vi": "Có thể bạn cân nhắc làm một điều dịu dàng cho bản thân hôm nay.",
+        "en": "You might consider doing one gentle thing for yourself today."
+      }
+    },
+    {
+      "id": "love-03",
+      "topics": [
+        "love"
+      ],
+      "universal": false,
+      "theme": "timing",
+      "tags": [
+        "love",
+        "decision",
+        "time"
+      ],
+      "message": {
+        "vi": "Không cần vội",
+        "en": "No need to rush"
+      },
+      "meaning": {
+        "vi": "Những mối gắn kết bền lâu thường lớn lên chậm rãi, từng khoảnh khắc nhỏ.",
+        "en": "Lasting bonds usually grow slowly, one small moment at a time."
+      },
+      "guidance": {
+        "vi": "Hãy thử để mọi thứ có đủ không gian để diễn ra tự nhiên, thay vì ép nó đi nhanh hơn.",
+        "en": "Try giving things enough space to unfold naturally, instead of pushing them faster."
+      }
+    },
+    {
+      "id": "love-04",
+      "topics": [
+        "love"
+      ],
+      "universal": false,
+      "theme": "openness",
+      "tags": [
+        "love",
+        "loneliness",
+        "opportunity"
+      ],
+      "message": {
+        "vi": "Mở lòng với điều mới",
+        "en": "Stay open to the new"
+      },
+      "meaning": {
+        "vi": "Một trái tim từng tổn thương vẫn có thể mở ra, theo nhịp của riêng nó.",
+        "en": "A heart that has been hurt can still open, at its own pace."
+      },
+      "guidance": {
+        "vi": "Hãy thử trò chuyện với một người mới mà không đặt kỳ vọng nào.",
+        "en": "Try having a conversation with someone new, without any expectations."
+      }
+    },
+    {
+      "id": "love-05",
+      "topics": [
+        "love"
+      ],
+      "universal": false,
+      "theme": "reciprocity",
+      "tags": [
+        "love",
+        "conflict"
+      ],
+      "message": {
+        "vi": "Cho đi, và cho phép mình nhận",
+        "en": "Give, and let yourself receive"
+      },
+      "meaning": {
+        "vi": "Một mối quan hệ lành mạnh cần cả hai chiều: biết quan tâm và biết được quan tâm.",
+        "en": "A healthy relationship needs both directions: caring, and being cared for."
+      },
+      "guidance": {
+        "vi": "Có thể bạn cân nhắc xem gần đây mình đang cho đi nhiều hơn hay nhận nhiều hơn.",
+        "en": "You might consider whether lately you’ve been giving more than receiving, or the other way around."
+      }
+    },
+    {
+      "id": "family-01",
+      "topics": [
+        "family"
+      ],
+      "universal": false,
+      "theme": "listening",
+      "tags": [
+        "family",
+        "parents",
+        "conflict"
+      ],
+      "message": {
+        "vi": "Lắng nghe trước khi giải thích",
+        "en": "Listen before explaining"
+      },
+      "meaning": {
+        "vi": "Người thân thường cần được thấu hiểu hơn là cần được thuyết phục.",
+        "en": "Family often needs to be understood more than they need to be convinced."
+      },
+      "guidance": {
+        "vi": "Hãy thử hỏi một câu và lắng nghe trọn vẹn câu trả lời, không ngắt lời.",
+        "en": "Try asking one question and listening to the whole answer without interrupting."
+      }
+    },
+    {
+      "id": "family-02",
+      "topics": [
+        "family"
+      ],
+      "universal": false,
+      "theme": "presence",
+      "tags": [
+        "family",
+        "parents",
+        "time"
+      ],
+      "message": {
+        "vi": "Thời gian bên nhau là món quà",
+        "en": "Time together is the gift"
+      },
+      "meaning": {
+        "vi": "Những khoảnh khắc bình thường bên gia đình thường là điều ta nhớ lâu nhất.",
+        "en": "Ordinary moments with family are often the ones we remember longest."
+      },
+      "guidance": {
+        "vi": "Có thể bạn cân nhắc một bữa cơm chung không điện thoại.",
+        "en": "You might consider a shared meal with no phones."
+      }
+    },
+    {
+      "id": "family-03",
+      "topics": [
+        "family"
+      ],
+      "universal": false,
+      "theme": "acceptance",
+      "tags": [
+        "family",
+        "children",
+        "conflict"
+      ],
+      "message": {
+        "vi": "Mỗi người một nhịp",
+        "en": "Everyone has their own pace"
+      },
+      "meaning": {
+        "vi": "Người thân của bạn cũng đang tìm đường đi của mình, với những điều bạn chưa thấy hết.",
+        "en": "The people you love are also finding their way, with things you can’t fully see."
+      },
+      "guidance": {
+        "vi": "Hãy thử nhìn tình huống từ phía họ, dù chỉ một phút.",
+        "en": "Try looking at the situation from their side, even for one minute."
+      }
+    },
+    {
+      "id": "family-04",
+      "topics": [
+        "family"
+      ],
+      "universal": false,
+      "theme": "boundaries",
+      "tags": [
+        "family",
+        "parents",
+        "boundaries",
+        "stress"
+      ],
+      "message": {
+        "vi": "Ranh giới cũng là yêu thương",
+        "en": "Boundaries can be a form of love"
+      },
+      "meaning": {
+        "vi": "Một khoảng cách lành mạnh giúp mối quan hệ có chỗ để thở.",
+        "en": "A healthy distance gives a relationship room to breathe."
+      },
+      "guidance": {
+        "vi": "Có thể bạn cân nhắc nói rõ điều mình cần, bằng giọng ôn hòa.",
+        "en": "You might consider saying what you need, in a calm voice."
+      }
+    },
+    {
+      "id": "family-05",
+      "topics": [
+        "family"
+      ],
+      "universal": false,
+      "theme": "gratitude",
+      "tags": [
+        "family",
+        "parents",
+        "children"
+      ],
+      "message": {
+        "vi": "Một lời cảm ơn nhỏ",
+        "en": "A small thank you"
+      },
+      "meaning": {
+        "vi": "Những người gần gũi nhất thường nghe lời cảm ơn ít nhất, vì ta đã quá quen với họ.",
+        "en": "Those closest to us often hear thanks the least, because we’re used to them."
+      },
+      "guidance": {
+        "vi": "Hãy thử cảm ơn một người trong nhà vì một điều rất nhỏ.",
+        "en": "Try thanking someone at home for something very small."
+      }
+    },
+    {
+      "id": "relationships-01",
+      "topics": [
+        "relationships"
+      ],
+      "universal": false,
+      "theme": "connection",
+      "tags": [
+        "friends",
+        "loneliness"
+      ],
+      "message": {
+        "vi": "Chất lượng hơn số lượng",
+        "en": "Quality over quantity"
+      },
+      "meaning": {
+        "vi": "Vài người bạn thật có thể quý hơn rất nhiều mối quen biết xã giao.",
+        "en": "A few true friends can mean more than many casual connections."
+      },
+      "guidance": {
+        "vi": "Có thể bạn cân nhắc liên lạc với một người bạn đã lâu chưa trò chuyện.",
+        "en": "You might consider reaching out to a friend you haven’t spoken with in a while."
+      }
+    },
+    {
+      "id": "relationships-02",
+      "topics": [
+        "relationships"
+      ],
+      "universal": false,
+      "theme": "reconciliation",
+      "tags": [
+        "conflict",
+        "friends"
+      ],
+      "message": {
+        "vi": "Hiểu lầm có thể gỡ được",
+        "en": "Misunderstandings can be untangled"
+      },
+      "meaning": {
+        "vi": "Nhiều khoảng cách chỉ là một cuộc trò chuyện chưa diễn ra.",
+        "en": "Many distances are just a conversation that hasn’t happened yet."
+      },
+      "guidance": {
+        "vi": "Hãy thử nhắn một lời hỏi thăm giản dị, không cần giải thích gì.",
+        "en": "Try sending a simple hello, with no need to explain anything."
+      }
+    },
+    {
+      "id": "relationships-03",
+      "topics": [
+        "relationships"
+      ],
+      "universal": false,
+      "theme": "authenticity",
+      "tags": [
+        "friends",
+        "confidence"
+      ],
+      "message": {
+        "vi": "Cứ là chính mình",
+        "en": "Be yourself"
+      },
+      "meaning": {
+        "vi": "Những người phù hợp sẽ ở lại khi bạn thôi cố trở thành người khác.",
+        "en": "The right people stay when you stop trying to be someone else."
+      },
+      "guidance": {
+        "vi": "Hãy thử nói một ý kiến thật của mình trong cuộc trò chuyện tới.",
+        "en": "Try sharing one honest opinion in your next conversation."
+      }
+    },
+    {
+      "id": "relationships-04",
+      "topics": [
+        "relationships"
+      ],
+      "universal": false,
+      "theme": "kindness",
+      "tags": [
+        "friends",
+        "loneliness"
+      ],
+      "message": {
+        "vi": "Một sự tử tế nhỏ",
+        "en": "Small kindness"
+      },
+      "meaning": {
+        "vi": "Một cử chỉ tử tế nhỏ có thể sưởi ấm cả ngày của ai đó, và của chính bạn.",
+        "en": "One small act of kindness can warm someone’s whole day, and yours."
+      },
+      "guidance": {
+        "vi": "Có thể bạn cân nhắc làm một điều nhỏ cho ai đó hôm nay, không cần họ biết.",
+        "en": "You might consider doing something small for someone today, without needing them to know."
+      }
+    },
+    {
+      "id": "relationships-05",
+      "topics": [
+        "relationships"
+      ],
+      "universal": false,
+      "theme": "effort",
+      "tags": [
+        "friends",
+        "love",
+        "family"
+      ],
+      "message": {
+        "vi": "Mối quan hệ cần được chăm sóc",
+        "en": "Relationships need tending"
+      },
+      "meaning": {
+        "vi": "Như một khu vườn, mối quan hệ lớn lên nhờ sự chú ý đều đặn.",
+        "en": "Like a garden, a relationship grows through steady attention."
+      },
+      "guidance": {
+        "vi": "Hãy thử dành mười phút trong tuần này cho một người quan trọng với bạn.",
+        "en": "Try giving ten minutes this week to someone who matters to you."
+      }
+    },
+    {
+      "id": "work-01",
+      "topics": [
+        "work"
+      ],
+      "universal": false,
+      "theme": "patience",
+      "tags": [
+        "career",
+        "motivation",
+        "time"
+      ],
+      "message": {
+        "vi": "Kiên nhẫn thêm một chút",
+        "en": "Be a little more patient"
+      },
+      "meaning": {
+        "vi": "Có những điều cần thời gian để chín. Sự chậm lại lúc này không có nghĩa là bạn đang đi sai hướng.",
+        "en": "Some things need time to ripen. Slowing down now doesn’t mean you’re heading the wrong way."
+      },
+      "guidance": {
+        "vi": "Hãy thử nhìn lại điều nhỏ nhất bạn đã làm được tuần này, và tiếp tục từ đó.",
+        "en": "Try looking at the smallest thing you accomplished this week, and continue from there."
+      }
+    },
+    {
+      "id": "work-02",
+      "topics": [
+        "work"
+      ],
+      "universal": false,
+      "theme": "confidence",
+      "tags": [
+        "career",
+        "confidence"
+      ],
+      "message": {
+        "vi": "Giá trị của bạn không đổi",
+        "en": "Your worth hasn’t changed"
+      },
+      "meaning": {
+        "vi": "Một kết quả chưa như ý không định nghĩa năng lực của bạn.",
+        "en": "An outcome that didn’t go as hoped doesn’t define your ability."
+      },
+      "guidance": {
+        "vi": "Có thể bạn cân nhắc liệt kê ba điều bạn đã làm tốt gần đây.",
+        "en": "You might consider listing three things you did well recently."
+      }
+    },
+    {
+      "id": "work-03",
+      "topics": [
+        "work"
+      ],
+      "universal": false,
+      "theme": "opportunity",
+      "tags": [
+        "career",
+        "change",
+        "opportunity",
+        "decision"
+      ],
+      "message": {
+        "vi": "Một cánh cửa đang hé",
+        "en": "A door is ajar"
+      },
+      "meaning": {
+        "vi": "Cơ hội thường đến dưới những hình hài chưa hoàn hảo.",
+        "en": "Opportunities often arrive in imperfect shapes."
+      },
+      "guidance": {
+        "vi": "Hãy thử tìm hiểu thêm về một khả năng mới, chỉ để biết, chưa cần quyết định.",
+        "en": "Try learning more about a new possibility, just to know more, with no need to decide yet."
+      }
+    },
+    {
+      "id": "work-04",
+      "topics": [
+        "work"
+      ],
+      "universal": false,
+      "theme": "rest",
+      "tags": [
+        "career",
+        "stress"
+      ],
+      "message": {
+        "vi": "Nghỉ ngơi để đi xa hơn",
+        "en": "Rest to go further"
+      },
+      "meaning": {
+        "vi": "Kết quả bền vững đến từ một nhịp độ vừa sức, không phải từ việc chạy hết tốc lực mãi.",
+        "en": "Lasting results come from a sustainable pace, not from running at full speed forever."
+      },
+      "guidance": {
+        "vi": "Có thể bạn cân nhắc chọn một việc để thôi làm vào cuối tuần này.",
+        "en": "You might consider choosing one thing to stop doing this weekend."
+      }
+    },
+    {
+      "id": "work-05",
+      "topics": [
+        "work"
+      ],
+      "universal": false,
+      "theme": "communication",
+      "tags": [
+        "career",
+        "conflict",
+        "boundaries"
+      ],
+      "message": {
+        "vi": "Nói điều bạn cần",
+        "en": "Say what you need"
+      },
+      "meaning": {
+        "vi": "Đồng nghiệp và quản lý thường không thể biết điều bạn chưa nói ra.",
+        "en": "Colleagues and managers often can’t know what you haven’t said."
+      },
+      "guidance": {
+        "vi": "Hãy thử chuẩn bị một câu ngắn, rõ về điều bạn cần, rồi chọn lúc phù hợp để chia sẻ.",
+        "en": "Try preparing one short, clear sentence about what you need, then find the right moment to share it."
+      }
+    },
+    {
+      "id": "money-01",
+      "topics": [
+        "money"
+      ],
+      "universal": false,
+      "theme": "calm",
+      "tags": [
+        "money",
+        "debt",
+        "stress",
+        "fear"
+      ],
+      "message": {
+        "vi": "Bình tĩnh với những con số",
+        "en": "Stay calm with the numbers"
+      },
+      "meaning": {
+        "vi": "Nhìn thẳng vào thực tế thường bớt đáng sợ hơn là né tránh nó.",
+        "en": "Looking at reality directly is usually less frightening than avoiding it."
+      },
+      "guidance": {
+        "vi": "Hãy thử dành mười phút viết ra bức tranh tài chính hiện tại, chỉ để thấy rõ.",
+        "en": "Try spending ten minutes writing down your current financial picture, just to see it clearly."
+      }
+    },
+    {
+      "id": "money-02",
+      "topics": [
+        "money"
+      ],
+      "universal": false,
+      "theme": "enough",
+      "tags": [
+        "money",
+        "stress"
+      ],
+      "message": {
+        "vi": "Đủ đầy cũng là một loại giàu",
+        "en": "Enough is a kind of wealth"
+      },
+      "meaning": {
+        "vi": "Cảm giác đủ đầy đến từ việc biết mình thật sự cần gì.",
+        "en": "A sense of enough comes from knowing what you truly need."
+      },
+      "guidance": {
+        "vi": "Có thể bạn cân nhắc điều gì quan trọng nhất với mình, trước khi nghĩ đến chuyện thêm.",
+        "en": "You might consider what matters most to you before thinking about adding more."
+      }
+    },
+    {
+      "id": "money-03",
+      "topics": [
+        "money"
+      ],
+      "universal": false,
+      "theme": "consistency",
+      "tags": [
+        "money",
+        "habits"
+      ],
+      "message": {
+        "vi": "Những bước nhỏ cộng dồn",
+        "en": "Small steps add up"
+      },
+      "meaning": {
+        "vi": "Sự đều đặn thường có sức mạnh hơn một nỗ lực lớn nhưng ngắn ngủi.",
+        "en": "Steadiness often has more power than one big, short-lived effort."
+      },
+      "guidance": {
+        "vi": "Hãy thử chọn một thói quen nhỏ về tiền mà bạn có thể giữ được.",
+        "en": "Try choosing one small money habit you can realistically keep."
+      }
+    },
+    {
+      "id": "money-04",
+      "topics": [
+        "money"
+      ],
+      "universal": false,
+      "theme": "counsel",
+      "tags": [
+        "money",
+        "decision",
+        "debt"
+      ],
+      "message": {
+        "vi": "Hỏi người am hiểu",
+        "en": "Ask someone who knows"
+      },
+      "meaning": {
+        "vi": "Những quyết định tài chính lớn nên có thêm góc nhìn của người am hiểu.",
+        "en": "Big financial decisions benefit from the view of someone with expertise."
+      },
+      "guidance": {
+        "vi": "Có thể bạn cân nhắc trao đổi với chuyên gia hoặc người đáng tin cậy trước khi quyết định.",
+        "en": "You might consider talking with a professional or a trusted person before deciding."
+      }
+    },
+    {
+      "id": "money-05",
+      "topics": [
+        "money"
+      ],
+      "universal": false,
+      "theme": "perspective",
+      "tags": [
+        "money",
+        "dreams"
+      ],
+      "message": {
+        "vi": "Giá trị không chỉ là tiền",
+        "en": "Value isn’t only money"
+      },
+      "meaning": {
+        "vi": "Sức khỏe, thời gian và các mối quan hệ cũng là những thứ bạn đầu tư mỗi ngày.",
+        "en": "Health, time, and relationships are also things you invest in every day."
+      },
+      "guidance": {
+        "vi": "Hãy thử nhận ra tuần này bạn dành thời gian cho điều gì, và nó có thật sự quan trọng không.",
+        "en": "Try noticing what you gave your time to this week, and whether it truly mattered."
+      }
+    },
+    {
+      "id": "health-01",
+      "topics": [
+        "health"
+      ],
+      "universal": false,
+      "theme": "body-listening",
+      "tags": [
+        "health",
+        "stress",
+        "sleep"
+      ],
+      "message": {
+        "vi": "Lắng nghe cơ thể",
+        "en": "Listen to your body"
+      },
+      "meaning": {
+        "vi": "Cơ thể thường thì thầm trước khi cần lên tiếng mạnh hơn.",
+        "en": "Your body often whispers before it needs to speak louder."
+      },
+      "guidance": {
+        "vi": "Hãy thử dừng lại vài phút hôm nay để cảm nhận xem mình thế nào. Nếu có điều khiến bạn lo lắng, hãy trao đổi với bác sĩ.",
+        "en": "Try pausing for a few minutes today to notice how you feel. If something worries you, talk with a doctor."
+      }
+    },
+    {
+      "id": "health-02",
+      "topics": [
+        "health"
+      ],
+      "universal": false,
+      "theme": "calm",
+      "tags": [
+        "stress",
+        "health",
+        "fear"
+      ],
+      "message": {
+        "vi": "Hít thở",
+        "en": "Breathe"
+      },
+      "meaning": {
+        "vi": "Một hơi thở chậm là cách đơn giản nhất để nhắc cơ thể rằng bạn đang an toàn.",
+        "en": "A slow breath is the simplest way to remind your body that you’re safe."
+      },
+      "guidance": {
+        "vi": "Hãy thử hít vào thật chậm trong bốn nhịp, rồi thở ra thật chậm, vài lần liên tiếp.",
+        "en": "Try breathing in slowly for four counts, then out slowly, a few times in a row."
+      }
+    },
+    {
+      "id": "health-03",
+      "topics": [
+        "health"
+      ],
+      "universal": false,
+      "theme": "rhythm",
+      "tags": [
+        "sleep",
+        "habits",
+        "health"
+      ],
+      "message": {
+        "vi": "Tìm lại nhịp của mình",
+        "en": "Find your rhythm"
+      },
+      "meaning": {
+        "vi": "Một nhịp sinh hoạt đều đặn có thể mang lại nhiều bình yên hơn bạn nghĩ.",
+        "en": "A steady daily rhythm can bring more calm than you’d expect."
+      },
+      "guidance": {
+        "vi": "Có thể bạn cân nhắc giữ giờ đi ngủ ổn định trong vài ngày, và xem mình cảm thấy ra sao.",
+        "en": "You might consider keeping a consistent bedtime for a few days and noticing how you feel."
+      }
+    },
+    {
+      "id": "health-04",
+      "topics": [
+        "health"
+      ],
+      "universal": false,
+      "theme": "self-compassion",
+      "tags": [
+        "stress",
+        "health",
+        "grief"
+      ],
+      "message": {
+        "vi": "Nhẹ nhàng với chính mình",
+        "en": "Be gentle with yourself"
+      },
+      "meaning": {
+        "vi": "Chữa lành không đi theo một đường thẳng, và điều đó hoàn toàn bình thường.",
+        "en": "Healing isn’t a straight line, and that’s completely normal."
+      },
+      "guidance": {
+        "vi": "Hãy thử nói với mình điều bạn sẽ nói với một người bạn thân.",
+        "en": "Try saying to yourself what you would say to a close friend."
+      }
+    },
+    {
+      "id": "health-05",
+      "topics": [
+        "health"
+      ],
+      "universal": false,
+      "theme": "movement",
+      "tags": [
+        "health",
+        "stress",
+        "habits"
+      ],
+      "message": {
+        "vi": "Ra ngoài một chút",
+        "en": "Step outside"
+      },
+      "meaning": {
+        "vi": "Không khí, ánh sáng và vài bước chân thường làm đầu óc nhẹ hơn ta tưởng.",
+        "en": "Fresh air, light, and a few steps often clear the mind more than we expect."
+      },
+      "guidance": {
+        "vi": "Hãy thử đi bộ mười phút ngoài trời hôm nay, không mang theo việc gì.",
+        "en": "Try a ten-minute walk outdoors today, with no agenda."
+      }
+    },
+    {
+      "id": "growth-01",
+      "topics": [
+        "growth"
+      ],
+      "universal": false,
+      "theme": "learning",
+      "tags": [
+        "growth",
+        "confidence",
+        "fear"
+      ],
+      "message": {
+        "vi": "Sai lầm cũng là người thầy",
+        "en": "Mistakes are teachers"
+      },
+      "meaning": {
+        "vi": "Mỗi lần vấp cho bạn biết thêm một điều không hiệu quả.",
+        "en": "Every stumble shows you something about what doesn’t work."
+      },
+      "guidance": {
+        "vi": "Hãy thử viết ra một điều bạn học được từ một lần vấp gần đây.",
+        "en": "Try writing down one thing you learned from a recent mistake."
+      }
+    },
+    {
+      "id": "growth-02",
+      "topics": [
+        "growth"
+      ],
+      "universal": false,
+      "theme": "consistency",
+      "tags": [
+        "habits",
+        "growth",
+        "motivation"
+      ],
+      "message": {
+        "vi": "Thói quen nhỏ, thay đổi lớn",
+        "en": "Small habits, big shifts"
+      },
+      "meaning": {
+        "vi": "Con người bạn sau một năm được tạo nên từ những việc nhỏ lặp lại mỗi ngày.",
+        "en": "The person you’ll be in a year is built from small things repeated daily."
+      },
+      "guidance": {
+        "vi": "Có thể bạn cân nhắc chọn một thói quen thật nhỏ và giữ nó trong một tuần.",
+        "en": "You might consider choosing one very small habit and keeping it for a week."
+      }
+    },
+    {
+      "id": "growth-03",
+      "topics": [
+        "growth"
+      ],
+      "universal": false,
+      "theme": "courage",
+      "tags": [
+        "growth",
+        "fear",
+        "opportunity"
+      ],
+      "message": {
+        "vi": "Bước ra khỏi vùng quen thuộc",
+        "en": "Step beyond the familiar"
+      },
+      "meaning": {
+        "vi": "Cảm giác hồi hộp thường đi cùng những điều đáng làm.",
+        "en": "That flutter of nerves often comes with things worth doing."
+      },
+      "guidance": {
+        "vi": "Hãy thử làm một việc nhỏ mà bạn vẫn hay tránh.",
+        "en": "Try doing one small thing you usually avoid."
+      }
+    },
+    {
+      "id": "growth-04",
+      "topics": [
+        "growth"
+      ],
+      "universal": false,
+      "theme": "curiosity",
+      "tags": [
+        "growth",
+        "confidence"
+      ],
+      "message": {
+        "vi": "Tò mò thay vì phán xét",
+        "en": "Be curious, not critical"
+      },
+      "meaning": {
+        "vi": "Khi bạn hỏi “vì sao” thay vì “sao mình tệ vậy”, bạn bắt đầu hiểu mình hơn.",
+        "en": "When you ask “why” instead of “why am I like this,” you begin to understand yourself."
+      },
+      "guidance": {
+        "vi": "Hãy thử đặt cho mình một câu hỏi tò mò, và để câu trả lời đến chậm rãi.",
+        "en": "Try asking yourself one curious question, and let the answer come slowly."
+      }
+    },
+    {
+      "id": "growth-05",
+      "topics": [
+        "growth"
+      ],
+      "universal": false,
+      "theme": "progress",
+      "tags": [
+        "growth",
+        "motivation",
+        "confidence"
+      ],
+      "message": {
+        "vi": "Bạn đã đi xa hơn bạn nghĩ",
+        "en": "You’re further along than you think"
+      },
+      "meaning": {
+        "vi": "Ta thường nhìn mãi vào điều chưa đạt được mà quên ngoảnh lại quãng đường đã đi.",
+        "en": "We often stare at what’s not yet done and forget to look back at the road we’ve covered."
+      },
+      "guidance": {
+        "vi": "Có thể bạn cân nhắc nhớ lại bạn của một năm trước, và nhận ra điều gì đã khác.",
+        "en": "You might consider remembering who you were a year ago, and noticing what has changed."
+      }
+    },
+    {
+      "id": "dreams-01",
+      "topics": [
+        "dreams"
+      ],
+      "universal": false,
+      "theme": "clarity",
+      "tags": [
+        "dreams",
+        "motivation"
+      ],
+      "message": {
+        "vi": "Cho giấc mơ một hình hài",
+        "en": "Give the dream a shape"
+      },
+      "meaning": {
+        "vi": "Một giấc mơ có tên và có hình ảnh dễ bước tới hơn một giấc mơ mơ hồ.",
+        "en": "A dream with a name and an image is easier to walk toward than a vague one."
+      },
+      "guidance": {
+        "vi": "Hãy thử mô tả giấc mơ của bạn trong ba câu.",
+        "en": "Try describing your dream in three sentences."
+      }
+    },
+    {
+      "id": "dreams-02",
+      "topics": [
+        "dreams"
+      ],
+      "universal": false,
+      "theme": "courage",
+      "tags": [
+        "dreams",
+        "fear",
+        "opportunity"
+      ],
+      "message": {
+        "vi": "Đủ dũng cảm để bắt đầu",
+        "en": "Brave enough to begin"
+      },
+      "meaning": {
+        "vi": "Sự sẵn sàng hoàn hảo hiếm khi đến; thường nó đến sau khi ta bắt đầu.",
+        "en": "Perfect readiness rarely arrives; it usually comes after you begin."
+      },
+      "guidance": {
+        "vi": "Có thể bạn cân nhắc làm phiên bản nhỏ nhất của giấc mơ ấy ngay trong tuần này.",
+        "en": "You might consider making the smallest version of your dream this week."
+      }
+    },
+    {
+      "id": "dreams-03",
+      "topics": [
+        "dreams"
+      ],
+      "universal": false,
+      "theme": "connection",
+      "tags": [
+        "opportunity",
+        "dreams",
+        "friends"
+      ],
+      "message": {
+        "vi": "Cánh cửa mở ra từ con người",
+        "en": "Doors open through people"
+      },
+      "meaning": {
+        "vi": "Nhiều cơ hội đến từ một cuộc trò chuyện hơn là từ một kế hoạch hoàn hảo.",
+        "en": "Many opportunities come from a conversation rather than a perfect plan."
+      },
+      "guidance": {
+        "vi": "Hãy thử chia sẻ giấc mơ của bạn với một người bạn tin tưởng.",
+        "en": "Try sharing your dream with someone you trust."
+      }
+    },
+    {
+      "id": "dreams-04",
+      "topics": [
+        "dreams"
+      ],
+      "universal": false,
+      "theme": "comparison",
+      "tags": [
+        "dreams",
+        "confidence"
+      ],
+      "message": {
+        "vi": "Đừng so sánh hành trình",
+        "en": "Don’t compare journeys"
+      },
+      "meaning": {
+        "vi": "Mỗi người nở hoa vào một mùa khác nhau.",
+        "en": "Everyone blooms in a different season."
+      },
+      "guidance": {
+        "vi": "Có thể bạn cân nhắc tắt bớt những thứ khiến bạn hay so sánh trong vài ngày.",
+        "en": "You might consider muting whatever tempts you to compare for a few days."
+      }
+    },
+    {
+      "id": "dreams-05",
+      "topics": [
+        "dreams"
+      ],
+      "universal": false,
+      "theme": "hope",
+      "tags": [
+        "dreams",
+        "motivation",
+        "grief"
+      ],
+      "message": {
+        "vi": "Giữ lấy ánh sáng nhỏ",
+        "en": "Keep the small light"
+      },
+      "meaning": {
+        "vi": "Một chút hy vọng nhỏ cũng đủ để bước tiếp qua một quãng tối.",
+        "en": "A little hope is enough to keep walking through a dark stretch."
+      },
+      "guidance": {
+        "vi": "Hãy thử nhớ lại điều gần đây khiến bạn háo hức, dù chỉ một chút.",
+        "en": "Try recalling something recently that made you even slightly excited."
+      }
+    },
+    {
+      "id": "universal-01",
+      "topics": [],
+      "universal": true,
+      "theme": "timing",
+      "tags": [
+        "time",
+        "opportunity"
+      ],
+      "message": {
+        "vi": "Tin vào thời điểm",
+        "en": "Trust the timing"
+      },
+      "meaning": {
+        "vi": "Có những điều đến chậm không phải vì chúng không đến, mà vì chúng đang được chuẩn bị.",
+        "en": "Some things arrive slowly not because they won’t come, but because they’re being prepared."
+      },
+      "guidance": {
+        "vi": "Hãy thử thả lỏng một điều bạn đang cố ép, ít nhất là trong hôm nay.",
+        "en": "Try loosening your grip on something you’ve been forcing, at least for today."
+      }
+    },
+    {
+      "id": "universal-02",
+      "topics": [],
+      "universal": true,
+      "theme": "openness",
+      "tags": [
+        "opportunity",
+        "friends"
+      ],
+      "message": {
+        "vi": "Hãy mở lòng",
+        "en": "Keep an open heart"
+      },
+      "meaning": {
+        "vi": "Sự cởi mở thường mở ra những lối đi mà sự cân nhắc quá kỹ không thấy được.",
+        "en": "Openness often reveals paths that careful over-thinking can’t see."
+      },
+      "guidance": {
+        "vi": "Có thể bạn cân nhắc chia sẻ một suy nghĩ thật với một người bạn tin tưởng.",
+        "en": "You might consider sharing one honest thought with someone you trust."
+      }
+    },
+    {
+      "id": "universal-03",
+      "topics": [],
+      "universal": true,
+      "theme": "letting-go",
+      "tags": [
+        "change",
+        "grief",
+        "breakup",
+        "stress"
+      ],
+      "message": {
+        "vi": "Buông lỏng một chút",
+        "en": "Loosen your grip"
+      },
+      "meaning": {
+        "vi": "Nắm chặt quá lâu khiến tay mỏi, và đôi khi buông ra là cách để có chỗ đón điều mới.",
+        "en": "Holding on too tightly for too long is tiring, and sometimes letting go makes room for something new."
+      },
+      "guidance": {
+        "vi": "Hãy thử xác định một điều bạn đang cố giữ, và tự hỏi nó còn phục vụ mình không.",
+        "en": "Try naming one thing you’re holding onto, and ask whether it still serves you."
+      }
+    },
+    {
+      "id": "universal-04",
+      "topics": [],
+      "universal": true,
+      "theme": "presence",
+      "tags": [
+        "stress",
+        "fear",
+        "time"
+      ],
+      "message": {
+        "vi": "Ở lại với hiện tại",
+        "en": "Stay with the present"
+      },
+      "meaning": {
+        "vi": "Phần lớn lo lắng thuộc về một ngày mai chưa đến.",
+        "en": "Most worry belongs to a tomorrow that hasn’t arrived."
+      },
+      "guidance": {
+        "vi": "Hãy thử chú ý năm điều bạn nhìn thấy quanh mình ngay lúc này.",
+        "en": "Try noticing five things you can see around you right now."
+      }
+    },
+    {
+      "id": "universal-05",
+      "topics": [],
+      "universal": true,
+      "theme": "gratitude",
+      "tags": [
+        "stress",
+        "grief",
+        "growth"
+      ],
+      "message": {
+        "vi": "Một lòng biết ơn nhỏ",
+        "en": "A small gratitude"
+      },
+      "meaning": {
+        "vi": "Chú ý đến điều đang tốt không phủ nhận khó khăn; nó chỉ cho bạn thêm chỗ đứng vững.",
+        "en": "Noticing what’s good doesn’t deny what’s hard; it simply gives you firmer ground to stand on."
+      },
+      "guidance": {
+        "vi": "Có thể bạn cân nhắc viết ra ba điều nhỏ khiến bạn mỉm cười hôm nay.",
+        "en": "You might consider writing down three small things that made you smile today."
+      }
+    },
+    {
+      "id": "universal-06",
+      "topics": [],
+      "universal": true,
+      "theme": "belonging",
+      "tags": [
+        "loneliness",
+        "grief",
+        "stress",
+        "friends"
+      ],
+      "message": {
+        "vi": "Bạn không đơn độc",
+        "en": "You’re not alone"
+      },
+      "meaning": {
+        "vi": "Nhiều người đang đi qua những điều tương tự, dù họ ít khi nói ra.",
+        "en": "Many people are going through similar things, even if they rarely say so."
+      },
+      "guidance": {
+        "vi": "Hãy thử nhắn cho một người mà bạn cảm thấy an toàn khi ở bên.",
+        "en": "Try messaging someone you feel safe with."
+      }
+    },
+    {
+      "id": "universal-07",
+      "topics": [],
+      "universal": true,
+      "theme": "simplicity",
+      "tags": [
+        "stress",
+        "decision",
+        "habits"
+      ],
+      "message": {
+        "vi": "Đơn giản hóa",
+        "en": "Simplify"
+      },
+      "meaning": {
+        "vi": "Khi mọi thứ rối lên, thường chỉ có một hai việc thật sự quan trọng.",
+        "en": "When everything feels tangled, usually only one or two things truly matter."
+      },
+      "guidance": {
+        "vi": "Hãy thử chọn việc quan trọng nhất hôm nay và để các việc khác chờ.",
+        "en": "Try choosing the single most important thing today and letting the rest wait."
+      }
+    },
+    {
+      "id": "universal-08",
+      "topics": [],
+      "universal": true,
+      "theme": "forgiveness",
+      "tags": [
+        "grief",
+        "confidence",
+        "breakup"
+      ],
+      "message": {
+        "vi": "Tha thứ cho chính mình",
+        "en": "Forgive yourself"
+      },
+      "meaning": {
+        "vi": "Bạn đã làm điều tốt nhất có thể với những gì bạn biết vào lúc đó.",
+        "en": "You did the best you could with what you knew at the time."
+      },
+      "guidance": {
+        "vi": "Có thể bạn cân nhắc nói với mình một lời nhẹ nhàng về điều đã qua.",
+        "en": "You might consider speaking to yourself gently about what has passed."
+      }
+    },
+    {
+      "id": "universal-09",
+      "topics": [],
+      "universal": true,
+      "theme": "action",
+      "tags": [
+        "motivation",
+        "decision",
+        "change"
+      ],
+      "message": {
+        "vi": "Một hành động nhỏ hôm nay",
+        "en": "One small action today"
+      },
+      "meaning": {
+        "vi": "Suy nghĩ cho ta hướng đi, nhưng chính bước chân mới cho ta câu trả lời.",
+        "en": "Thinking gives us direction, but it’s the steps that give us answers."
+      },
+      "guidance": {
+        "vi": "Hãy thử làm điều nhỏ nhất mà bạn vẫn đang trì hoãn, chỉ trong năm phút.",
+        "en": "Try doing the smallest thing you’ve been putting off, for just five minutes."
+      }
+    },
+    {
+      "id": "universal-10",
+      "topics": [],
+      "universal": true,
+      "theme": "joy",
+      "tags": [
+        "dreams",
+        "growth",
+        "motivation"
+      ],
+      "message": {
+        "vi": "Niềm vui là chiếc la bàn",
+        "en": "Joy is a compass"
+      },
+      "meaning": {
+        "vi": "Điều khiến bạn thật sự thấy nhẹ nhõm và vui thường chỉ ra điều quan trọng với bạn.",
+        "en": "What truly brings you lightness and joy often points to what matters to you."
+      },
+      "guidance": {
+        "vi": "Có thể bạn cân nhắc dành thời gian cho một điều chỉ đơn giản làm bạn vui.",
+        "en": "You might consider making time for something that simply makes you happy."
+      }
+    }
+  ]
+}
