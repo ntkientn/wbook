@@ -8,8 +8,9 @@
    - Fills Message / Meaning / Guidance in the current language. Switching
      language while the result is on screen swaps the words only: the same
      result stays, and the reveal animation (css/result.css) does not restart.
-   - Share Card: painted on a 1080×1350 canvas (4:5), exported as PNG. It holds
-     the result and the brand only: never the question, topic or tags.
+   - Share Card: painted on a 1080×1350 canvas (4:5), exported as PNG. It holds the
+     result and the brand, plus the user's own question unless they switch it off
+     (never the topic or tags).
      Shared through the Web Share API where files are supported, otherwise saved.
    - layoutCard() is pure (it needs only a text-measuring function), so the
      worst-case text fit can be tested without a browser.
@@ -36,11 +37,21 @@ function wrapText(measure, font, text, maxWidth) {
   return lines;
 }
 
+/** Keep at most `max` lines; the last one ends with an ellipsis that still fits. */
+function clampLines(measure, font, lines, max, maxWidth) {
+  if (lines.length <= max) return lines;
+  const out = lines.slice(0, max);
+  let last = `${out[max - 1]}…`;
+  while (last.length > 1 && measure(font, last) > maxWidth) last = `${last.slice(0, -2)}…`;
+  out[max - 1] = last;
+  return out;
+}
+
 /**
  * Decide font sizes, line breaks and vertical positions so the text always fits
  * inside the safe area. Shrinks everything together until it does.
  */
-export function layoutCard(measure, { message, meaning, guidance }) {
+export function layoutCard(measure, { question = '', message, meaning, guidance }) {
   const avail = CARD.safeBottom - CARD.safeTop;
   let result = null;
 
@@ -54,7 +65,10 @@ export function layoutCard(measure, { message, meaning, guidance }) {
       msgSize -= 4;
     } while (msgSize > 56 * scale);
 
+    const qFont = `italic 400 ${34 * scale}px ${SERIF}`;
     const blocks = [
+      ...(question ? [{ kind: 'question', font: qFont, size: 34 * scale, lh: 34 * scale * 1.4, gapAfter: 52 * scale,
+        lines: clampLines(measure, qFont, wrapText(measure, qFont, question, CARD.textW - 40), 3, CARD.textW - 40) }] : []),
       { kind: 'message',  font: msgFont, size: msgSize, lh: msgSize * 1.08, lines: msgLines },
       { kind: 'rule',     gapBefore: 56 * scale, height: 2, gapAfter: 56 * scale },
       { kind: 'meaning',  font: `300 ${34 * scale}px ${SANS}`, size: 34 * scale, lh: 34 * scale * 1.55,
@@ -122,9 +136,12 @@ async function loadCardFonts(text) {
 
 export function initResult(app) {
   const resultEl = $('#result');
+  const resEl = $('.res', resultEl);
   const shareEl = $('#share');
   const cardImg = $('#share-card');
   const sendBtn = $('#share-send');
+  const qToggle = $('#share-qtoggle');
+  let includeQuestion = true; // on by default; the user can switch it off for the card
   const saveBtn = $('#share-save');
 
   /* ------------------------------------------------------------------
@@ -134,10 +151,30 @@ export function initResult(app) {
   function renderResult() {
     const r = app.result;
     if (!r) return;
+    const q = app.question.trim();
+    const qEl = $('#res-question');
+    qEl.textContent = q ? `“${q}”` : '';
+    qEl.hidden = !q;
+    $('.res', resultEl).classList.toggle('has-question', Boolean(q));
     $('#res-message').textContent = app.tr(r.message);
     $('#res-meaning').textContent = app.tr(r.meaning);
     $('#res-guidance').textContent = app.tr(r.guidance);
   }
+
+  // one soft bell note at the very moment the Message starts to appear
+  $('#res-title').addEventListener('animationstart', (e) => { if (e.target === e.currentTarget) app.sound?.chime(); });
+
+  // Tap, click or Enter/Space shows the whole result at once. Ignored during the first 2 s, so the
+  // finger that has just let go of the book can never skip the moment by accident.
+  let openedAt = 0;
+  function skipReveal() {
+    if (performance.now() - openedAt < 2000) return;
+    resEl.classList.add('is-skipped');
+  }
+  resultEl.addEventListener('pointerdown', (e) => { if (!e.target.closest('button')) skipReveal(); });
+  resultEl.addEventListener('keydown', (e) => {
+    if ((e.key === 'Enter' || e.key === ' ') && e.target === resultEl) { e.preventDefault(); skipReveal(); }
+  });
 
   $('#res-reset').addEventListener('click', () => app.reset());
   $('#res-share').addEventListener('click', openShare);
@@ -148,14 +185,15 @@ export function initResult(app) {
 
   const css = (name, fallback) => getComputedStyle(shareEl).getPropertyValue(name).trim() || fallback;
 
-  async function paintCard(result) {
+  async function paintCard(result, withQuestion) {
+    const question = withQuestion ? app.question.trim() : '';
     const message = app.tr(result.message);
     const meaning = app.tr(result.meaning);
     const guidance = app.tr(result.guidance);
     const brand = app.t('brand.name').toLocaleUpperCase(app.lang);
     const tagline = app.t('share.cardTagline').toLocaleUpperCase(app.lang);
 
-    await loadCardFonts([message, meaning, guidance, brand, tagline].join(' '));
+    await loadCardFonts([question, message, meaning, guidance, brand, tagline].join(' '));
 
     const ink = css('--card-ink', '#060a1c'), ink2 = css('--card-ink-2', '#0e1840');
     const gold = css('--card-gold', '#c9a45c'), goldSoft = css('--card-gold-soft', '#e6c98a');
@@ -196,14 +234,15 @@ export function initResult(app) {
     // body
     g.textBaseline = 'top';
     const layout = layoutCard((font, text) => { g.font = font; return g.measureText(text).width; },
-      { message, meaning, guidance });
+      { question: question ? `“${question}”` : '', message, meaning, guidance });
     for (const b of layout.blocks) {
       if (b.kind === 'rule') {
         g.fillStyle = gold; g.fillRect(W / 2 - 34, b.y, 68, b.height);
         continue;
       }
       g.font = b.font;
-      g.fillStyle = b.kind === 'message' ? goldSoft : b.kind === 'meaning' ? hexToRgba(paper, 0.82) : paper;
+      g.fillStyle = b.kind === 'question' ? hexToRgba(paper, 0.68)
+        : b.kind === 'message' ? goldSoft : b.kind === 'meaning' ? hexToRgba(paper, 0.82) : paper;
       if (b.kind === 'message') { g.shadowColor = hexToRgba(goldSoft, 0.35); g.shadowBlur = 36; }
       b.lines.forEach((line, i) => g.fillText(line, W / 2, b.y + i * b.lh));
       g.shadowBlur = 0;
@@ -227,16 +266,26 @@ export function initResult(app) {
     cardFile = new File([blob], `${app.ui.share.fileName}.png`, { type: 'image/png' });
     cardImg.src = cardUrl;
     cardImg.alt = app.tr(app.result.message);
-    sendBtn.hidden = !(navigator.canShare && navigator.canShare({ files: [cardFile] }));
+    // The system share sheet lists Facebook, X, Zalo, Messenger… on phones and tablets, but on a computer it
+    // rarely does (and a web page cannot post an image to those sites itself). So: shown on touch devices only.
+    const touchDevice = matchMedia('(hover: none) and (pointer: coarse)').matches;
+    sendBtn.hidden = !(touchDevice && navigator.canShare && navigator.canShare({ files: [cardFile] }));
   }
 
   async function buildCard() {
-    try { return await paintCard(app.result); }
+    try { return await paintCard(app.result, includeQuestion); }
     catch (err) { console.error('[WonderBook] share card failed', err); return null; }
   }
 
+  function syncToggle() { // offered only when there is a question to show
+    qToggle.hidden = app.question.trim() === '';
+    qToggle.setAttribute('aria-checked', String(includeQuestion));
+  }
+  qToggle.addEventListener('click', () => { includeQuestion = !includeQuestion; syncToggle(); refreshShare(); });
+
   async function openShare() {
     if (!app.result) return;
+    syncToggle();
     const mine = ++token;
     const blob = await buildCard();
     if (!blob || mine !== token || app.state !== 'result') return;
@@ -284,6 +333,8 @@ export function initResult(app) {
   app.on('state', ({ state }) => {
     if (state === 'result') {
       renderResult();
+      resEl.classList.remove('is-skipped');
+      openedAt = performance.now();
       app.overlay.open(resultEl); // no Escape here: leaving a result is a deliberate "New Ritual"
     } else {
       if (!shareEl.hidden) closeShare();

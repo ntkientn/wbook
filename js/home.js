@@ -37,11 +37,15 @@ export function initHome(app) {
   const options = app.ui.intentions.map((item) => {
     const el = document.createElement('button');
     el.type = 'button';
-    el.className = item.type === 'open' ? 'intention intention--open' : 'intention';
+    // "What Awaits?" (first) and "…so many things" (last) span the full width of the list
+    el.className = item.type === 'topic' ? 'intention' : `intention intention--wide intention--${item.type}`;
     el.dataset.id = item.id;
     if (item.type === 'fun') el.setAttribute('aria-haspopup', 'dialog');
     else el.setAttribute('aria-pressed', 'false');
-    el.addEventListener('click', () => (item.type === 'fun' ? openJoke() : app.select(item.id)));
+    el.addEventListener('click', () => {
+      if (item.type === 'fun') openJoke();
+      else if (app.select(item.id)) app.sound?.bowl(0.05); // a faint note when the user chooses (never on page load)
+    });
     grid.append(el);
     return { item, el };
   });
@@ -59,6 +63,7 @@ export function initHome(app) {
   }
 
   function syncSelection() {
+    grid.classList.toggle('has-selection', app.intention !== null); // CSS fades the other options
     for (const { item, el } of options) {
       if (item.type !== 'fun') el.setAttribute('aria-pressed', String(app.intention === item.id));
     }
@@ -101,7 +106,6 @@ export function initHome(app) {
 
   function closeJoke() { app.overlay.close(modal); }
 
-  $('#joke-next').addEventListener('click', () => { nextJoke(); renderJoke(true); });
   $('#joke-close').addEventListener('click', closeJoke);
   modal.addEventListener('click', (e) => { if (e.target === modal) closeJoke(); });
 
@@ -204,6 +208,9 @@ export function initHome(app) {
   app.on('intention', syncSelection);
 
   app.on('reset', () => {
+    window.scrollTo({ top: 0, behavior: reduceMotion.matches ? 'auto' : 'smooth' }); // back to where the ritual begins
+    playIntro();
+    app.sound?.bowl(0.07); // the ritual begins again
     stopVoice();
     hideNote();
     setQuestion('');
@@ -213,6 +220,7 @@ export function initHome(app) {
 
   app.on('lang', () => {
     stopVoice(); // recognition language is fixed per session
+    splitPrompt();
     renderLabels();
     syncSelection();
     if (!modal.hidden) renderJoke(false);
@@ -237,6 +245,42 @@ export function initHome(app) {
   });
   kicker.addEventListener('animationend', () => kicker.classList.remove('is-pulse'));
 
+  /* Opening the ritual: the question appears word by word, then the rest follows.
+     Plays on load and again after "New Ritual"; not at all with reduced motion. */
+  const prompt = $('.prompt');
+  function splitPrompt() {
+    let i = 0;
+    prompt.querySelectorAll('[data-i18n]').forEach((part) => {
+      part.replaceChildren(...app.t(part.dataset.i18n).split(/(\s+)/).filter(Boolean).map((chunk) => {
+        if (/^\s+$/.test(chunk)) return document.createTextNode(chunk);
+        const w = document.createElement('span');
+        w.className = 'w';
+        w.style.setProperty('--i', i++);
+        w.textContent = chunk;
+        return w;
+      }));
+    });
+  }
+  let introTimer = 0;
+  function playIntro() {
+    if (reduceMotion.matches) return;
+    homeEl.classList.remove('is-intro');
+    void homeEl.offsetWidth; // restart the animations
+    homeEl.classList.add('is-intro');
+    clearTimeout(introTimer);
+    introTimer = setTimeout(() => homeEl.classList.remove('is-intro'), 9500);
+  }
+  // Any tap, click or key press shows everything at once (it still reaches whatever was tapped)
+  function finishIntro() {
+    if (!homeEl.classList.contains('is-intro')) return;
+    clearTimeout(introTimer);
+    homeEl.classList.remove('is-intro');
+  }
+  document.addEventListener('pointerdown', finishIntro, true);
+  document.addEventListener('keydown', finishIntro, true);
+
+  splitPrompt();
+  playIntro();
   renderLabels();
   syncSelection();
 }

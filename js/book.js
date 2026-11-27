@@ -22,23 +22,34 @@
      app.finishRitual() runs 450 ms after the last page has landed.
      How long the user holds never influences WHICH result appears.
 
+   LIGHT            golden dust falls from above into the open pages while they flip.
+   TUNING           FLIP_TEMPO (search for it near the top) sets how fast the pages flip.
    REDUCED MOTION   no 3D: the cover fades, pages dissolve one by one, no motes.
    ========================================================================== */
 
 const $ = (sel, root = document) => root.querySelector(sel);
 
 /* ---------- Tuning ---------- */
-const LEAF_COUNT = 12;
+const LEAF_COUNT = 16;
 const TAP_MS = 300;          // shorter press = tap → continuous flipping
 const OPEN_SEC = 1.1;        // cover opening
 const CLOSE_SEC = 0.9;       // cover closing
-const START_SPEED = 0.8;     // pages per second at the first flip
-const MAX_SPEED = 5.2;
-const ACCEL = 2.4;           // pages/s gained per second of holding
-const DECAY = 0.1;           // speed multiplier per second after release
-const STOP_BELOW = 0.7;      // below this speed, no new page starts
+
+/* ======= FLIP SPEED: change this ONE number =======================================
+   1 = original speed · 1.7 = 70% faster (current) · 2.5 = very fast · 1.2 = a little faster */
+const FLIP_TEMPO = 1.7;
+/* =================================================================================== */
+const START_SPEED = 0.8 * FLIP_TEMPO;   // pages per second at the first flip
+const MAX_SPEED = 5.2 * FLIP_TEMPO;
+const ACCEL = 2.4 * FLIP_TEMPO;         // pages/s gained per second of holding
+const DECAY = 0.1;                      // speed multiplier per second after release
+const STOP_BELOW = 0.7 * FLIP_TEMPO;    // below this speed, no new page starts
+const LAND_LIFE = 2.1 / FLIP_TEMPO;     // seconds a landed page stays on the left stack
+const LAND_FADE = 0.5 / FLIP_TEMPO;     // … of which the last part is a fade-out
 const FINISH_DELAY = 450;    // ms between the last page landing and the result
 const LYING_TILT = 68;       // degrees: the book resting flat while no topic is chosen
+const LYING_YAW = 0;         // degrees it is turned on the table, so the spine shows (like a book laid down)
+const LYING_DROP = 14;       // % it sinks towards the bottom while resting
 const NEED_MS = 3200;        // how long "choose a topic first" stays visible
 
 const WORDS = ('lumen stellarum nox caelum aether via tempus luna sol cor ventus mare silentium umbra ' +
@@ -95,11 +106,13 @@ export function initBook(app) {
   const pageText = () => { const t = el('page-text'); textBlocks.push(t); return t; };
 
   const boardRight = el('board board--right');
-  const boardLeft = el('board board--left');
+  boardRight.append(el('board-rim'));
   const pagesLeft = el('pages pages--left');
   const pagesRight = el('pages pages--right');
   pagesLeft.append(pageText());
   pagesRight.append(pageText());
+  const edgeLeft = el('edge edge--left');
+  const edgeRight = el('edge edge--right');
 
   const leavesEl = el('leaves');
   const leaves = Array.from({ length: LEAF_COUNT }, () => {
@@ -118,9 +131,12 @@ export function initBook(app) {
   const cover = el('cover');
   const coverFront = el('cover-front');
   coverFront.innerHTML = EMBLEM_SVG;
-  cover.append(coverFront, el('cover-back'));
+  cover.append(coverFront, el('cover-back'), el('cover-rim'));
 
-  scene.replaceChildren(boardRight, boardLeft, pagesLeft, pagesRight, leavesEl, gutter, pageLight, cover);
+  const spineFace = el('spine-face');
+  // pages, edges and flying leaves are direct children of the scene (one flat 3D context, z = 0 for the pages)
+  scene.replaceChildren(boardRight, spineFace, pagesLeft, pagesRight, edgeLeft, edgeRight, leavesEl, gutter, pageLight, cover);
+  // the opened cover itself forms the left board
   scene.classList.toggle('is-reduced', reduced);
   textBlocks.forEach(fillPageText);
 
@@ -158,7 +174,8 @@ export function initBook(app) {
     const l = leaves[waiting.pop()];
     l.state = 'fly';
     l.t = 0;
-    l.dur = Math.max(0.2, 0.95 - 0.15 * speed); // faster riffle as speed rises
+    app.sound?.flip(); // a soft paper rustle (only if the user turned sound on)
+    l.dur = Math.max(0.2, 0.95 - 0.15 * (speed / FLIP_TEMPO)) / FLIP_TEMPO; // faster riffle as speed rises
   }
 
   function update(dt) {
@@ -202,7 +219,7 @@ export function initBook(app) {
         }
       } else if (l.state === 'land') {
         l.age += dt;
-        if (l.age > 2.1) { l.state = 'wait'; waiting.unshift(i); }
+        if (l.age > LAND_LIFE) { l.state = 'wait'; waiting.unshift(i); }
       }
     });
 
@@ -232,7 +249,7 @@ export function initBook(app) {
         if (reduced) { transform = 'translateZ(6px)'; opacity = 1 - e; }
         else { transform = `translateZ(6px) rotateY(${-180 * e}deg) skewY(${-s * 5}deg)`; shade = 0.5 * s; }
       } else if (l.state === 'land') {
-        if (l.age > 1.6) opacity = Math.max(0, 1 - (l.age - 1.6) / 0.5);
+        if (l.age > LAND_LIFE - LAND_FADE) opacity = Math.max(0, 1 - (l.age - (LAND_LIFE - LAND_FADE)) / LAND_FADE);
         transform = `translateZ(${2 + (l.seq - minSeq) * 0.1}px) rotateY(-180deg)`;
       } else {
         transform = `translateZ(${1 + waiting.indexOf(i) * 0.12}px)`;
@@ -244,10 +261,10 @@ export function initBook(app) {
 
     // cover, tilt and position
     if (reduced) {
-      cover.style.transform = 'translateZ(14px)';
+      cover.style.transform = 'translateZ(calc(var(--t) * 0.1))';
       cover.style.opacity = String(1 - o);
     } else {
-      cover.style.transform = `translateZ(${14 - 26 * o}px) rotateY(${-180 * o}deg)`;
+      cover.style.transform = `translateZ(calc(var(--t) * ${0.1 - o})) rotateY(${-180 * o}deg)`;
       cover.style.opacity = '';
     }
     const lying = app.state === 'home' && !reduced;   // no topic yet: rest flat
@@ -255,14 +272,21 @@ export function initBook(app) {
     tilt += (tiltTarget - tilt) * Math.min(1, dt * 4); // ~0.8 s to stand up or lie down
     render.tiltTarget = tiltTarget;
     const rest = Math.max(0, Math.min(1, (tilt - 33) / (LYING_TILT - 33))); // 0 standing … 1 lying
+    // thickness of the page edge under the cover: constant ON SCREEN whatever the tilt
+    const bandScreen = 9 - 3 * rest;
+    coverFront.style.setProperty('--band', `${(bandScreen / Math.max(0.3, Math.cos((tilt * Math.PI) / 180))).toFixed(1)}px`);
     const shift = reduced ? -25 : -25 * (1 - o);
     scene.style.transform =
-      `translateY(${rest * 14}%) rotateX(${tilt}deg) translateX(${shift}%) scale(${1 - 0.08 * rest})`;
+      `translateY(${rest * LYING_DROP}%) rotateX(${tilt}deg) rotateZ(${-rest * LYING_YAW}deg) ` +
+      `translateX(${shift}%) scale(${1 - 0.08 * rest})`;
 
     // left half appears as the cover swings over
-    const left = reduced ? 0 : Math.max(0, (o - 0.5) * 2);
-    boardLeft.style.opacity = String(left);
+    const left = reduced ? 0 : Math.min(1, Math.max(0, (o - 0.5) * 8)); // appears quickly once the cover is upright
     pagesLeft.style.opacity = String(left);
+    edgeLeft.style.opacity = String(left);
+    const right = reduced ? 1 : Math.min(1, o * 6); // right board and edge only exist once the cover lifts
+    boardRight.style.opacity = String(right);
+    edgeRight.style.opacity = String(right);
     gutter.style.opacity = String(left);
 
     const lightTarget = o > 0.5 ? (active ? 1 : 0.45) : 0;
@@ -295,27 +319,41 @@ export function initBook(app) {
 
   function drawMotes(dt) {
     const f = dt * 60; // the tuning below is per 60 fps frame
-    const emitting = render.lastOpen && app.state !== 'result' && !closing && !reduced; // no new motes while the book closes
-    const rate = emitting ? (render.lastActive ? 0.4 + speed * 0.5 : 0.12) : 0;
-    if (Math.random() < rate * f) {
+    const emitting = render.lastOpen && app.state !== 'result' && !closing && !reduced; // none while the book closes
+    const tempo = speed / FLIP_TEMPO; // 0 … 5, independent of the flip-speed setting
+    const rate = emitting ? (render.lastActive ? 0.4 + tempo * 0.5 : 0.12) : 0;
+
+    // where the open pages are, relative to this canvas
+    const cr = motesCanvas.getBoundingClientRect();
+    const br = button.getBoundingClientRect();
+    const bookX = br.left + br.width / 2 - cr.left;
+    const bookY = br.top + br.height * 0.58 - cr.top;
+
+    if (Math.random() < rate * f) { // energy arrives from above and sinks into the pages
+      const r = Math.random() * 1.5 + 0.4;
+      const depth = (r - 0.4) / 1.5; // 0 = far, 1 = near: bigger dust is nearer, faster and brighter
       motes.push({
-        x: mw / 2 + (Math.random() - 0.5) * Math.min(mw * 0.4, 170),
-        y: mh - 150,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: -(0.5 + Math.random() * 1.1) * (1 + speed * 0.4),
-        r: Math.random() * 1.5 + 0.4,
-        life: 1,
+        x: bookX + (Math.random() - 0.5) * br.width * 1.6,
+        y: -10 - Math.random() * 40,
+        tx: bookX + (Math.random() - 0.5) * br.width * 0.5,
+        ty: bookY + (Math.random() - 0.5) * br.height * 0.2,
+        vy: (0.7 + depth * 1.1 + Math.random() * 0.5) * (1 + tempo * 0.12),
+        r,
+        peak: 0.35 + depth * 0.5 + Math.random() * 0.15,
+        age: 0,
       });
     }
     mctx.clearRect(0, 0, mw, mh);
     mctx.shadowBlur = 6;
     mctx.shadowColor = 'rgba(230, 201, 138, 0.8)';
     motes = motes.filter((p) => {
-      p.x += (p.vx + Math.sin(p.y / 22) * 0.15) * f;
+      const dy = p.ty - p.y;
+      if (dy <= 0) return false; // reached the pages: absorbed
+      p.x += ((p.tx - p.x) * 0.006 + Math.sin(p.y / 22) * 0.15) * f; // drifting towards the landing spot
       p.y += p.vy * f;
-      p.life -= 0.007 * f;
-      if (p.life <= 0) return false;
-      mctx.fillStyle = `rgba(255, 230, 170, ${p.life * 0.8})`;
+      p.age += f;
+      const alpha = p.peak * Math.min(1, p.age / 30) * Math.min(1, dy / 45); // fade in, fade into the book
+      mctx.fillStyle = `rgba(255, 230, 170, ${alpha})`;
       mctx.beginPath();
       mctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
       mctx.fill();

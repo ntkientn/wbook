@@ -32,6 +32,7 @@ import { loadContent } from './content.js';
 import { initHome } from './home.js';
 import { initBook } from './book.js';
 import { initResult } from './result.js';
+import { initSound } from './sound.js';
 
 /* ---------- Small helpers ---------- */
 
@@ -289,6 +290,7 @@ async function main() {
   $('#lang-toggle').addEventListener('click', () => setLang(lang === 'vi' ? 'en' : 'vi'));
   initStars($('#stars'));
 
+  app.sound = initSound(app); // optional sound; book.js and result.js call app.sound.flip() / .chime()
   initHome(app);
   initBook(app);
   initResult(app);
