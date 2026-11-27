@@ -113,22 +113,17 @@ button { background: none; border: 0; padding: 0; cursor: pointer; }
   display: flex; flex-direction: column;
 }
 
-.back { /* small, quiet link to the author's site (top-left) */
-  align-self: flex-start; display: inline-flex; align-items: center; gap: 6px;
-  padding: 12px 14px 6px 0; margin-bottom: -6px;
-  font: 400 12px / 1.2 var(--font-sans); letter-spacing: 0.06em; color: var(--mist);
-  text-decoration: none; transition: color 0.3s;
-}
-.back-arrow { display: inline-block; transition: transform 0.3s; }
-.back:hover { color: var(--gold-soft); }
-.back:hover .back-arrow { transform: translateX(-3px); }
-
-.top { display: flex; justify-content: space-between; align-items: center; padding: 10px 0 8px; }
+.top { display: flex; justify-content: space-between; align-items: center; padding: 22px 0 8px; }
 
 .brand {
   font: 500 21px var(--font-serif);
   letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-soft);
 }
+
+.tools { display: flex; align-items: center; gap: 12px; }
+.sound { display: grid; place-items: center; width: 34px; height: 34px; color: var(--mist); border-radius: 50%; transition: color 0.3s; }
+.sound:hover, .sound[aria-pressed="true"] { color: var(--gold-soft); }
+.sound[aria-pressed="true"] .sound-off, .sound[aria-pressed="false"] .sound-on { display: none; }
 
 .lang {
   padding: 8px 0; font-size: 12px; letter-spacing: 0.16em; color: var(--mist);
@@ -157,7 +152,7 @@ html[lang="en"] .lang [data-lang="en"] { color: var(--gold-soft); font-weight: 5
   position: relative; padding: 14px 2px 13px 20px;
   font: 400 var(--text-option) / 1.2 var(--font-serif); text-align: left;
   border-bottom: 1px solid var(--hair);
-  transition: color 0.3s, border-color 0.3s;
+  transition: color 0.3s, border-color 0.3s, opacity 0.5s;
 }
 .intention::before { /* selected marker: a gold diamond, so state never relies on colour alone */
   content: ""; position: absolute; left: 2px; top: 50%;
@@ -168,7 +163,13 @@ html[lang="en"] .lang [data-lang="en"] { color: var(--gold-soft); font-weight: 5
 .intention[aria-pressed="true"] { color: var(--gold-soft); border-bottom-color: var(--gold); }
 .intention[aria-pressed="true"]::before { transform: rotate(45deg) scale(1); }
 
-.intention--open { grid-column: 1 / -1; padding-top: 18px; padding-bottom: 16px; border-bottom: 0; }
+.intention--wide { grid-column: 1 / -1; }
+.intention--fun { border-bottom: 0; }                          /* last: nothing below it */
+
+/* once an option is chosen, the others fade back (still clickable; hover or focus brings them forward) */
+.intentions.has-selection .intention:not([aria-pressed="true"]) { opacity: 0.35; }
+.intentions.has-selection .intention:not([aria-pressed="true"]):hover,
+.intentions.has-selection .intention:not([aria-pressed="true"]):focus-visible { opacity: 0.85; }
 .intention-support {
   display: block; margin-top: 6px;
   font: 300 13px var(--font-sans); color: var(--mist);
@@ -180,6 +181,18 @@ html[lang="en"] .lang [data-lang="en"] { color: var(--gold-soft); font-weight: 5
   0%, 100% { color: var(--gold); text-shadow: none; }
   30%      { color: #f6e2ad; text-shadow: 0 0 16px rgba(230, 201, 138, 0.85); }
 }
+
+/* Opening ritual (js/home.js adds .is-intro): the question appears word by word, then the rest follows */
+.prompt .w { display: inline-block; }
+.home.is-intro .prompt .w { animation: word-in 2s ease-out both; animation-delay: calc(0.4s + var(--i) * 0.13s); }
+.home.is-intro .kicker { animation: soft-in 2.4s ease-out 5.2s both; }
+.home.is-intro .intentions { animation: soft-in 2.4s ease-out 5.6s both; }
+.home.is-intro .ask { animation: soft-in 2.4s ease-out 6.4s both; }
+@keyframes word-in {
+  from { opacity: 0; filter: blur(8px); transform: translateY(6px); }
+  to   { opacity: 1; filter: none; transform: none; }
+}
+@keyframes soft-in { from { opacity: 0; } to { opacity: 1; } }
 
 /* Optional question: a quiet link that becomes a single underlined line */
 .ask { min-height: 44px; margin-top: 26px; text-align: center; }
@@ -231,11 +244,14 @@ html[lang="en"] .lang [data-lang="en"] { color: var(--gold-soft); font-weight: 5
 .stage.is-active .hint:not(.hint--need) { opacity: 0; }
 .hint--need.is-shown { opacity: 1; visibility: visible; }
 /* Footer */
-.foot {
-  padding: 6px 0 calc(16px + env(safe-area-inset-bottom, 0px));
-  font: 300 11px / 1.4 var(--font-sans); letter-spacing: 0.04em;
-  text-align: center; color: rgba(154, 163, 189, 0.7);
+.foot { padding: 10px 0 calc(18px + env(safe-area-inset-bottom, 0px)); text-align: center; }
+.foot-line { font: italic 400 16px / 1.4 var(--font-serif); letter-spacing: 0.02em; color: var(--mist-soft); }
+.foot-link {
+  font-style: normal; font-weight: 500; color: var(--gold-soft); text-decoration: none;
+  border-bottom: 1px solid rgba(230, 201, 138, 0.35); transition: color 0.3s, border-color 0.3s;
 }
+.foot-link:hover { color: var(--gold); border-bottom-color: var(--gold); }
+.foot-legal { margin-top: 4px; font: 300 11px / 1.4 var(--font-sans); letter-spacing: 0.04em; color: rgba(154, 163, 189, 0.7); }
 
 /* ---------- 7. Shared overlay primitives (used by modal, result, share) ---------- */
 .scrim {
