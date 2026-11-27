@@ -22,25 +22,23 @@
   },
 
   "intentions": [
+    {
+      "id": "open",
+      "type": "open",
+      "label":   { "vi": "Một thông điệp bất kỳ từ vũ trụ dành cho tôi", "en": "Any message from the universe, meant for me" },
+      "support": { "vi": "", "en": "" }
+    },
     { "id": "life",          "type": "topic", "label": { "vi": "Cuộc sống",             "en": "Life & Direction" } },
-    { "id": "love",          "type": "topic", "label": { "vi": "Tình yêu",              "en": "Love & Romance" } },
     { "id": "family",        "type": "topic", "label": { "vi": "Gia đình",              "en": "Family" } },
+    { "id": "love",          "type": "topic", "label": { "vi": "Tình yêu",              "en": "Love & Romance" } },
     { "id": "relationships", "type": "topic", "label": { "vi": "Các mối quan hệ",       "en": "Relationships" } },
     { "id": "work",          "type": "topic", "label": { "vi": "Công việc & Sự nghiệp", "en": "Work & Career" } },
     { "id": "money",         "type": "topic", "label": { "vi": "Tiền bạc & Tài chính",  "en": "Money & Finance" } },
     { "id": "health",        "type": "topic", "label": { "vi": "Sức khỏe & Bình an",    "en": "Health & Wellbeing" } },
+    { "id": "decisions",     "type": "topic", "label": { "vi": "Quyết định & Lựa chọn", "en": "Decisions & Choices" } },
     { "id": "growth",        "type": "topic", "label": { "vi": "Phát triển bản thân",   "en": "Personal Growth" } },
     { "id": "dreams",        "type": "topic", "label": { "vi": "Ước mơ & Cơ hội",       "en": "Dreams & Opportunities" } },
-    { "id": "fun",           "type": "fun",   "label": { "vi": "Rất nhiều thứ!",        "en": "A Little Bit of Everything!" } },
-    {
-      "id": "open",
-      "type": "open",
-      "label":   { "vi": "Điều gì sẽ đến?", "en": "What Awaits?" },
-      "support": {
-        "vi": "Không giới hạn chủ đề — để vũ trụ lựa chọn.",
-        "en": "No topic limits — let the universe choose."
-      }
-    }
+    { "id": "fun",           "type": "fun",   "label": { "vi": "Tôi đang nghĩ tới rất nhiều thứ", "en": "I’m thinking about so many things" } }
   ],
 
   "question": {
@@ -73,6 +71,7 @@
 
   "share": {
     "cardTagline": { "vi": "Thông điệp từ vũ trụ", "en": "Messages from the Universe" },
+    "showQuestion": { "vi": "Hiện câu hỏi của tôi trên thiệp", "en": "Show my question on the card" },
     "save":  { "vi": "Lưu ảnh",  "en": "Save image" },
     "send":  { "vi": "Chia sẻ",  "en": "Share" },
     "close": { "vi": "Đóng",     "en": "Close" },

@@ -21,7 +21,8 @@
     "money",
     "health",
     "growth",
-    "dreams"
+    "dreams",
+    "decisions"
   ],
   "keywords": {
     "career": {
@@ -1792,6 +1793,128 @@
       "guidance": {
         "vi": "Có thể bạn cân nhắc dành thời gian cho một điều chỉ đơn giản làm bạn vui.",
         "en": "You might consider making time for something that simply makes you happy."
+      }
+    },
+    {
+      "id": "decisions-01",
+      "topics": [
+        "decisions"
+      ],
+      "universal": false,
+      "theme": "balance",
+      "tags": [
+        "decision",
+        "confidence"
+      ],
+      "message": {
+        "vi": "Lắng nghe cả lý trí và trực giác",
+        "en": "Listen to both mind and instinct"
+      },
+      "meaning": {
+        "vi": "Lựa chọn tốt thường nằm ở nơi suy nghĩ và cảm giác của bạn cùng gật đầu.",
+        "en": "A good choice often sits where your thoughts and your feelings both nod."
+      },
+      "guidance": {
+        "vi": "Hãy thử viết ra điều lý trí mách bảo và điều trái tim mách bảo, rồi xem chúng giao nhau ở đâu.",
+        "en": "Try writing down what your head says and what your heart says, then see where they meet."
+      }
+    },
+    {
+      "id": "decisions-02",
+      "topics": [
+        "decisions"
+      ],
+      "universal": false,
+      "theme": "good-enough",
+      "tags": [
+        "decision",
+        "stress"
+      ],
+      "message": {
+        "vi": "Đủ tốt là đủ",
+        "en": "Good enough is enough"
+      },
+      "meaning": {
+        "vi": "Tìm lựa chọn hoàn hảo thường lấy đi nhiều hơn những gì nó trao lại.",
+        "en": "Chasing the perfect choice often takes more than it gives back."
+      },
+      "guidance": {
+        "vi": "Hãy thử đặt một mốc thời gian cho quyết định này, rồi chọn phương án đủ tốt nhất vào lúc đó.",
+        "en": "Try setting a time limit for this decision, then choose the best good-enough option by then."
+      }
+    },
+    {
+      "id": "decisions-03",
+      "topics": [
+        "decisions"
+      ],
+      "universal": false,
+      "theme": "sleep-on-it",
+      "tags": [
+        "decision",
+        "stress",
+        "time"
+      ],
+      "message": {
+        "vi": "Ngủ một đêm với nó",
+        "en": "Sleep on it"
+      },
+      "meaning": {
+        "vi": "Sau một khoảng nghỉ, câu trả lời thường nhẹ nhàng hơn lúc bạn đang căng thẳng.",
+        "en": "After a pause, answers tend to feel lighter than they do in the heat of the moment."
+      },
+      "guidance": {
+        "vi": "Có thể bạn cân nhắc để quyết định này nghỉ qua một đêm, rồi xem sáng mai bạn nghiêng về phía nào.",
+        "en": "You might consider letting this decision rest overnight, and notice which way you lean in the morning."
+      }
+    },
+    {
+      "id": "decisions-04",
+      "topics": [
+        "decisions"
+      ],
+      "universal": false,
+      "theme": "fear-not-guide",
+      "tags": [
+        "decision",
+        "fear"
+      ],
+      "message": {
+        "vi": "Nỗi sợ không phải là la bàn",
+        "en": "Fear is not a compass"
+      },
+      "meaning": {
+        "vi": "Nỗi sợ nhắc ta cẩn thận, nhưng không phải lúc nào nó cũng chỉ đúng hướng.",
+        "en": "Fear reminds us to be careful, but it doesn’t always point the right way."
+      },
+      "guidance": {
+        "vi": "Hãy thử hỏi: nếu không sợ, mình sẽ chọn gì? Rồi cân nhắc câu trả lời đó.",
+        "en": "Try asking: if I weren’t afraid, what would I choose? Then weigh that answer."
+      }
+    },
+    {
+      "id": "decisions-05",
+      "topics": [
+        "decisions"
+      ],
+      "universal": false,
+      "theme": "paths",
+      "tags": [
+        "decision",
+        "change",
+        "opportunity"
+      ],
+      "message": {
+        "vi": "Mỗi lựa chọn mở ra một con đường",
+        "en": "Every choice opens a path"
+      },
+      "meaning": {
+        "vi": "Không lựa chọn nào đóng lại tất cả; bạn vẫn có thể điều chỉnh khi đi.",
+        "en": "No single choice closes every door; you can still adjust as you go."
+      },
+      "guidance": {
+        "vi": "Hãy thử hình dung bước đầu tiên nhỏ nhất của mỗi lựa chọn, và xem bước nào khiến bạn nhẹ lòng hơn.",
+        "en": "Try picturing the smallest first step of each option, and notice which one feels lighter."
       }
     }
   ]
