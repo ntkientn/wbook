@@ -41,14 +41,22 @@
 
   <div class="app" id="app">
 
-    <!-- Link back to the author's site. Intentionally English in both languages. -->
-    <a class="back" href="https://ntkientn.github.io/webnet/" lang="en"><span class="back-arrow" aria-hidden="true">←</span> Back to Webnet</a>
-
     <header class="top">
       <span class="brand" data-i18n="brand.name"></span>
-      <button class="lang" id="lang-toggle" type="button" aria-label="Language / Ngôn ngữ">
-        <span data-lang="vi">VI</span> / <span data-lang="en">EN</span>
-      </button>
+      <div class="tools">
+        <!-- Optional sound: off by default (see js/sound.js) -->
+        <button class="sound" id="sound-toggle" type="button" aria-pressed="false">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5H4z"/>
+            <path class="sound-on" d="M15.5 9a4 4 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/>
+            <path class="sound-off" d="M16 9.5l5 5M21 9.5l-5 5"/>
+          </svg>
+        </button>
+        <button class="lang" id="lang-toggle" type="button" aria-label="Language / Ngôn ngữ">
+          <span data-lang="vi">VI</span> / <span data-lang="en">EN</span>
+        </button>
+      </div>
     </header>
 
     <main class="home" id="home">
@@ -98,7 +106,10 @@
     </section>
 
     <!-- Intentionally English in both languages -->
-    <footer class="foot" lang="en">© 2026 Wonder Book · Kien NT · All rights reserved</footer>
+    <footer class="foot" lang="en">
+      <p class="foot-line">WonderBook — Part of <a class="foot-link" href="https://ntkientn.github.io/webnet">My WebNet</a></p>
+      <p class="foot-legal">© 2026 Kien NT • All rights reserved.</p>
+    </footer>
 
   </div>
 
@@ -106,6 +117,8 @@
   <section class="scrim result" id="result" role="dialog" aria-modal="true"
            aria-labelledby="res-title" tabindex="-1" hidden>
     <div class="res">
+      <!-- The user's own question (only if they typed one), shown quietly above the answer -->
+      <p class="res-question" id="res-question" hidden></p>
       <h2 class="msg" id="res-title">
         <span class="sr-only" data-i18n="result.ariaMessage"></span><span id="res-message"></span>
       </h2>
@@ -129,8 +142,7 @@
     <div class="joke">
       <p class="joke-text" id="joke-text"></p>
       <div class="acts">
-        <button class="act" id="joke-next" type="button" data-i18n="modal.another"></button>
-        <button class="act act-quiet" id="joke-close" type="button" data-i18n="modal.rechoose"></button>
+        <button class="act" id="joke-close" type="button" data-i18n="modal.rechoose"></button>
       </div>
     </div>
   </section>
@@ -139,6 +151,11 @@
   <section class="scrim share" id="share" role="dialog" aria-modal="true" tabindex="-1" hidden>
     <div class="share-box">
       <img class="share-card" id="share-card" alt="" width="1080" height="1350">
+      <!-- Only shown when the user typed a question. On by default; one tap turns it off. -->
+      <button class="toggle" id="share-qtoggle" type="button" role="switch" aria-checked="true" hidden>
+        <span class="toggle-track" aria-hidden="true"><span class="toggle-thumb"></span></span>
+        <span class="toggle-label" data-i18n="share.showQuestion"></span>
+      </button>
       <div class="acts">
         <button class="act" id="share-send" type="button" hidden data-i18n="share.send"></button>
         <button class="act" id="share-save" type="button" data-i18n="share.save"></button>
