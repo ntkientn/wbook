@@ -266,10 +266,7 @@ export function initResult(app) {
     cardFile = new File([blob], `${app.ui.share.fileName}.png`, { type: 'image/png' });
     cardImg.src = cardUrl;
     cardImg.alt = app.tr(app.result.message);
-    // The system share sheet lists Facebook, X, Zalo, Messenger… on phones and tablets, but on a computer it
-    // rarely does (and a web page cannot post an image to those sites itself). So: shown on touch devices only.
-    const touchDevice = matchMedia('(hover: none) and (pointer: coarse)').matches;
-    sendBtn.hidden = !(touchDevice && navigator.canShare && navigator.canShare({ files: [cardFile] }));
+    sendBtn.hidden = false; // phones: system share sheet · computers: Facebook / X / Email menu
   }
 
   async function buildCard() {
@@ -294,6 +291,7 @@ export function initResult(app) {
   }
 
   function closeShare() {
+    setMenu(false);
     token += 1;
     app.overlay.close(shareEl);
     if (cardUrl) { URL.revokeObjectURL(cardUrl); cardUrl = ''; }
@@ -317,14 +315,61 @@ export function initResult(app) {
     a.remove();
   });
 
-  sendBtn.addEventListener('click', async () => {
-    if (!cardFile) return;
-    try { await navigator.share({ files: [cardFile], title: app.t('share.shareTitle') }); }
-    catch (err) { if (err.name !== 'AbortError') console.warn('[WonderBook] share failed', err); }
+  /* --- sharing: text and the site link (the address lives in ui.json → site.url, one place) --- */
+  const isTouch = () => matchMedia('(hover: none) and (pointer: coarse)').matches;
+  const siteUrl = () => (app.ui.site && app.ui.site.url) || window.location.href.split(/[?#]/)[0];
+
+  /** full: question (if switched on) + message + meaning · short (for X, 280 characters): message only. */
+  function shareText(full) {
+    const r = app.result;
+    const q = includeQuestion ? app.question.trim() : '';
+    return `${q && full ? `“${q}”\n\n` : ''}“${app.tr(r.message)}”${full ? `\n${app.tr(r.meaning)}` : ''}\n\n✦ ${app.t('share.cardTagline')}`;
+  }
+
+  const menu = $('#share-menu');
+  const fbHint = $('#share-fb-hint');
+  function setMenu(open) {
+    menu.hidden = !open;
+    sendBtn.setAttribute('aria-expanded', String(open));
+    if (open) fbHint.textContent = app.t('share.facebookHint');
+  }
+
+  async function nativeShare() { // phones and tablets: the system sheet offers every installed app
+    const data = { title: app.t('share.shareTitle'), text: shareText(true), url: siteUrl() };
+    try {
+      if (cardFile && navigator.canShare && navigator.canShare({ files: [cardFile] })) await navigator.share({ ...data, files: [cardFile] });
+      else await navigator.share(data);
+    } catch (err) { if (err.name !== 'AbortError') console.warn('[WonderBook] share failed', err); }
+  }
+
+  sendBtn.addEventListener('click', () => {
+    if (isTouch() && navigator.share) nativeShare();
+    else setMenu(menu.hidden);
+  });
+
+  const popup = (url) => window.open(url, '_blank', 'noopener,noreferrer,width=620,height=560');
+  $('#share-x').addEventListener('click', () => {
+    popup(`https://x.com/intent/post?text=${encodeURIComponent(shareText(false))}&url=${encodeURIComponent(siteUrl())}`);
+    setMenu(false);
+  });
+  $('#share-mail').addEventListener('click', () => {
+    const body = `${shareText(true)}\n\n${siteUrl()}`;
+    window.location.href = `mailto:?subject=${encodeURIComponent(app.t('share.shareTitle'))}&body=${encodeURIComponent(body)}`;
+    setMenu(false);
+  });
+  $('#share-fb').addEventListener('click', () => {
+    // Facebook only accepts the link, never the words: so the message goes to the clipboard for the user to paste
+    popup(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(siteUrl())}`);
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(shareText(true)).then(() => { fbHint.textContent = app.t('share.facebookCopied'); }).catch(() => {});
+    }
   });
 
   $('#share-close').addEventListener('click', closeShare);
-  shareEl.addEventListener('click', (e) => { if (e.target === shareEl) closeShare(); });
+  shareEl.addEventListener('click', (e) => {
+    if (e.target === shareEl) closeShare();
+    else if (!menu.hidden && !e.target.closest('.share-wrap')) setMenu(false);
+  });
 
   /* ------------------------------------------------------------------
      3. Reacting to the app

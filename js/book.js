@@ -261,10 +261,12 @@ export function initBook(app) {
 
     // cover, tilt and position
     if (reduced) {
-      cover.style.transform = 'translateZ(calc(var(--t) * 0.1))';
+      cover.style.transform = 'translateZ(calc(var(--t) * 0.1 + 6px))';
       cover.style.opacity = String(1 - o);
     } else {
-      cover.style.transform = `translateZ(calc(var(--t) * ${0.1 - o})) rotateY(${-180 * o}deg)`;
+      // the closed cover must sit clearly above the resting pages (+6px): on a small screen the thin
+      // thickness value alone was lower than the stack of waiting pages, so they poked through the cover
+      cover.style.transform = `translateZ(calc(var(--t) * ${0.1 - o} + ${(6 * (1 - o)).toFixed(2)}px)) rotateY(${-180 * o}deg)`;
       cover.style.opacity = '';
     }
     const lying = app.state === 'home' && !reduced;   // no topic yet: rest flat
@@ -273,7 +275,7 @@ export function initBook(app) {
     render.tiltTarget = tiltTarget;
     const rest = Math.max(0, Math.min(1, (tilt - 33) / (LYING_TILT - 33))); // 0 standing … 1 lying
     // thickness of the page edge under the cover: constant ON SCREEN whatever the tilt
-    const bandScreen = 9 - 3 * rest;
+    const bandScreen = 12 - 3.5 * rest;
     coverFront.style.setProperty('--band', `${(bandScreen / Math.max(0.3, Math.cos((tilt * Math.PI) / 180))).toFixed(1)}px`);
     const shift = reduced ? -25 : -25 * (1 - o);
     scene.style.transform =

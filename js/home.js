@@ -34,12 +34,17 @@ export function initHome(app) {
      1. Intentions
      ------------------------------------------------------------------ */
 
+  // Each option belongs to a row (the two columns share a row); CSS reveals the rows one after another.
+  let topicIndex = 0;
+  const topicCount = app.ui.intentions.filter((i) => i.type === 'topic').length;
   const options = app.ui.intentions.map((item) => {
+    const row = item.type === 'open' ? 0 : item.type === 'topic' ? 1 + Math.floor(topicIndex++ / 2) : 1 + Math.ceil(topicCount / 2);
     const el = document.createElement('button');
     el.type = 'button';
     // "What Awaits?" (first) and "…so many things" (last) span the full width of the list
     el.className = item.type === 'topic' ? 'intention' : `intention intention--wide intention--${item.type}`;
     el.dataset.id = item.id;
+    el.style.setProperty('--row', row);
     if (item.type === 'fun') el.setAttribute('aria-haspopup', 'dialog');
     else el.setAttribute('aria-pressed', 'false');
     el.addEventListener('click', () => {
@@ -268,7 +273,7 @@ export function initHome(app) {
     void homeEl.offsetWidth; // restart the animations
     homeEl.classList.add('is-intro');
     clearTimeout(introTimer);
-    introTimer = setTimeout(() => homeEl.classList.remove('is-intro'), 9500);
+    introTimer = setTimeout(() => homeEl.classList.remove('is-intro'), 12000);
   }
   // Any tap, click or key press shows everything at once (it still reaches whatever was tapped)
   function finishIntro() {

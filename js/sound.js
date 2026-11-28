@@ -1,11 +1,11 @@
 /* ==========================================================================
    sound.js — optional, very soft sound: paper rustle per page, one bell note.
 
-   OFF by default. One small speaker button in the header turns it on; the choice
-   is remembered on this device. No audio files: every sound is synthesised with
+   ON by default (after the visitor's first tap; never on page load). One small speaker button
+   in the header turns it off; the choice is remembered on this device. No audio files: every sound is synthesised with
    the Web Audio API, so nothing is downloaded and nothing can fail to load.
 
-   REAL RECORDING (optional): put a short page-turn sound at assets/flip.mp3 and it replaces
+   REAL RECORDING (optional): put a short page-turn sound at assets/sounds/flip.mp3 and it replaces
    the synthesised rustle automatically; no code change needed.
 
    Contract (main.js exposes it as app.sound)
@@ -22,15 +22,15 @@ const KEY = 'wonderbook.sound';
 
 export function initSound(app) {
   const button = document.querySelector('#sound-toggle');
-  let enabled = false;
-  try { enabled = localStorage.getItem(KEY) === '1'; } catch { /* storage unavailable: stays off */ }
+  let enabled = true; // on from the first visit; the speaker button turns it off and the choice is remembered
+  try { enabled = localStorage.getItem(KEY) !== '0'; } catch { /* storage unavailable: stays on */ }
 
   let ctx = null, master = null, noise = null, sample = null, lastFlip = -1;
 
-  /** Optional: drop a real recording at assets/flip.mp3 and it is used instead of the synthesised rustle. */
+  /** Optional: drop a real recording at assets/sounds/flip.mp3 and it is used instead of the synthesised rustle. */
   async function loadSample(c) {
     try {
-      const res = await fetch('assets/flip.mp3');
+      const res = await fetch('assets/sounds/flip.mp3');
       if (res.ok) sample = await c.decodeAudioData(await res.arrayBuffer());
     } catch { /* no recording: the synthesised sound is used */ }
   }
@@ -159,6 +159,12 @@ export function initSound(app) {
   });
   app.on('lang', paint);
   paint();
+
+  // Browsers only allow audio after a touch, click or key press: prepare the engine on the very first one,
+  // so the first page flip of a first-time visitor already has its sound. Nothing ever plays on page load.
+  const unlock = () => { engine(); };
+  document.addEventListener('pointerdown', unlock, { once: true, capture: true });
+  document.addEventListener('keydown', unlock, { once: true, capture: true });
 
   return { flip, chime, bowl, get enabled() { return enabled; } };
 }
