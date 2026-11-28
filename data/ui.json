@@ -1,4 +1,5 @@
 {
+  "site": { "url": "https://ntkientn.github.io/wonderbook/" },
   "_readme": "All user-facing copy for WonderBook. Every string is {vi, en}. Do not hard-code copy in JS/HTML. Intention order here is the display order on Home.",
 
   "languages": {
@@ -76,7 +77,9 @@
     "send":  { "vi": "Chia sẻ",  "en": "Share" },
     "close": { "vi": "Đóng",     "en": "Close" },
     "fileName": "wonderbook-message",
-    "shareTitle": { "vi": "Một thông điệp từ WonderBook", "en": "A message from WonderBook" }
+    "shareTitle": { "vi": "Một thông điệp từ WonderBook", "en": "A message from WonderBook" },
+    "facebookHint":   { "vi": "Thông điệp sẽ được sao chép dể bạn hãy dán vào bài đăng Facebook.", "en": "Your message will be copied, you can paste it into the Facebook post." },
+    "facebookCopied": { "vi": "Đã sao chép thông điệp. Hãy dán (Cmd/Ctrl + V) vào bài đăng.", "en": "Message copied. Paste it (Cmd/Ctrl + V) into your post." }
   },
 
   "modal": {
