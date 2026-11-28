@@ -57,10 +57,10 @@
 .res { /* reveal timeline: change these numbers to speed the whole sequence up or down */
   --shift: 0s;
   --reveal-message: calc(0.4s + var(--shift));
-  --reveal-rule: calc(4.6s + var(--shift));
-  --reveal-meaning: calc(5.3s + var(--shift));
-  --reveal-guidance: calc(10.1s + var(--shift));
-  --reveal-actions: calc(13s + var(--shift));
+  --reveal-rule: calc(2.2s + var(--shift));
+  --reveal-meaning: calc(4.5s + var(--shift));
+  --reveal-guidance: calc(9.5s + var(--shift));
+  --reveal-actions: calc(15s + var(--shift));
 }
 .res { position: relative; z-index: 1; width: 100%; max-width: 560px; margin: auto; padding: 24px 0; }
 
@@ -174,3 +174,21 @@
 /* ---------- 7. Tap, click or Enter: show everything at once (js/result.js adds .is-skipped) ---------- */
 
 .res.is-skipped :is(.msg, .rule, .meaning, .guidance, .acts) { animation: none !important; }
+
+/* ---------- 8. Share menu (computer): Facebook · X · Email ---------- */
+
+.share-wrap { position: relative; display: inline-block; }
+.share-menu {
+  position: absolute; left: 50%; bottom: calc(100% + 14px); transform: translateX(-50%);
+  width: max-content; max-width: min(86vw, 300px);
+  display: flex; flex-direction: column; gap: 2px; padding: 8px;
+  background: rgba(5, 8, 22, 0.95); border: 1px solid var(--line); border-radius: 8px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+}
+.share-opt {
+  display: block; width: 100%; padding: 10px 14px; border-radius: 6px;
+  font: 400 15px var(--font-sans); letter-spacing: 0.04em; text-align: center; color: var(--paper);
+  transition: background 0.2s, color 0.2s;
+}
+.share-opt:hover, .share-opt:focus-visible { background: rgba(201, 164, 92, 0.12); color: var(--gold-soft); }
+.share-hint { display: block; margin-top: 4px; font: 300 12px / 1.45 var(--font-sans); letter-spacing: 0; color: var(--mist); }

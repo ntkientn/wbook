@@ -185,9 +185,19 @@ html[lang="en"] .lang [data-lang="en"] { color: var(--gold-soft); font-weight: 5
 /* Opening ritual (js/home.js adds .is-intro): the question appears word by word, then the rest follows */
 .prompt .w { display: inline-block; }
 .home.is-intro .prompt .w { animation: word-in 2s ease-out both; animation-delay: calc(0.4s + var(--i) * 0.13s); }
-.home.is-intro .kicker { animation: soft-in 2.4s ease-out 5.2s both; }
-.home.is-intro .intentions { animation: soft-in 2.4s ease-out 5.6s both; }
-.home.is-intro .ask { animation: soft-in 2.4s ease-out 6.4s both; }
+/* the timeline of the opening: change these numbers to speed it up or down (all in seconds) */
+.home.is-intro {
+  --intro-kicker: 5.2s;    /* the instruction line */
+  --intro-options: 7.7s;   /* first option: 1.5 s after the instruction starts */
+  --intro-row-gap: 0.95s;  /* pause between one row of options and the next */
+  --intro-ask: 12.6s;       /* the optional question */
+}
+.home.is-intro .kicker { animation: soft-in 2.4s ease-out var(--intro-kicker) both; }
+.home.is-intro .intention {
+  animation: soft-in 1.4s ease-out both;
+  animation-delay: calc(var(--intro-options) + var(--row, 0) * var(--intro-row-gap));
+}
+.home.is-intro .ask { animation: soft-in 2s ease-out var(--intro-ask) both; }
 @keyframes word-in {
   from { opacity: 0; filter: blur(8px); transform: translateY(6px); }
   to   { opacity: 1; filter: none; transform: none; }
