@@ -107,7 +107,7 @@
 
     <!-- Intentionally English in both languages -->
     <footer class="foot" lang="en">
-      <p class="foot-line">WonderBook — Part of <a class="foot-link" href="https://ntkientn.github.io/webnet">My WebNet</a></p>
+      <p class="foot-line">Wonder Book — Part of <a class="foot-link" href="https://ntkientn.github.io/webnet">My WebNet</a></p>
       <p class="foot-legal">© 2026 Kien NT • All rights reserved.</p>
     </footer>
 
@@ -157,7 +157,18 @@
         <span class="toggle-label" data-i18n="share.showQuestion"></span>
       </button>
       <div class="acts">
-        <button class="act" id="share-send" type="button" hidden data-i18n="share.send"></button>
+        <span class="share-wrap">
+          <button class="act" id="share-send" type="button" hidden aria-haspopup="true" aria-expanded="false"
+                  aria-controls="share-menu" data-i18n="share.send"></button>
+          <!-- Computer only: phones use the system share sheet (see js/result.js) -->
+          <div class="share-menu" id="share-menu" hidden>
+            <button class="share-opt" id="share-fb" type="button">Facebook
+              <small class="share-hint" id="share-fb-hint" data-i18n="share.facebookHint"></small>
+            </button>
+            <button class="share-opt" id="share-x" type="button">X</button>
+            <button class="share-opt" id="share-mail" type="button">Email</button>
+          </div>
+        </span>
         <button class="act" id="share-save" type="button" data-i18n="share.save"></button>
         <button class="act act-quiet" id="share-close" type="button" data-i18n="share.close"></button>
       </div>
